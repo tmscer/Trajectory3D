@@ -2,7 +2,7 @@ import math
 import numpy as np
 
 
-class Trajectory:
+class TrajectoryValues:
 
     def __init__(self, x=None, y=None, z=None, alpha=None, theta=None, v0=None, h0=0):
         self.h0 = h0
@@ -58,26 +58,42 @@ class Trajectory:
         self.x = self.xz * math.cos(self.theta)
         self.z = self.xz * math.sin(self.theta)
 
-    def calculate_trajectory(self, toplimit = 300):
-        if not self.ok:
+    def __str__(self):
+        return str(self.__dict__)
+
+    def __eq__(self, other):
+        if other is None:
+            return False
+        else:
+            return self.__dict__ == other.__dict__
+
+
+class Trajectory:
+
+    def __init__(self, x=None, y=None, z=None, alpha=None, theta=None, v0=None, h0=0):
+        self.values = TrajectoryValues(x, y, z, alpha, theta, v0, h0)
+        self.previous_values = None
+        self.previous_calculation = None
+
+    def calculate_trajectory(self, toplimit=300):
+        if not self.values.ok:
             return None
+        elif self.values == self.previous_values:
+            return self.previous_calculation
+        self.previous_values = self.values
         X = []
         Y = []
         Z = []
         t = 0
-        y = self.h0 + self.y * t - 1/2 * 9.81 * t**2
+        y = self.values.h0 + self.values.y * t - 1 / 2 * 9.81 * t ** 2
         while 0 <= y <= toplimit:
-            X.append(self.x * t)
-            Z.append(self.z * t)
+            X.append(self.values.x * t)
+            Z.append(self.values.z * t)
             Y.append(y)
             if y < 0.5:
                 t += 0.125 / 8
             else:
-                t += 0.125 / 4
-            y = self.h0 + self.y * t - 1/2 * 9.81 * t**2
-        return [X, Y, Z]
-
-
-#one = Trajectory(x=1, y=2, z=1)
-#two = Trajectory(alpha=one.alpha, theta=one.theta, v0=one.v0)
-#print()
+                t += 0.125 / 8
+            y = self.values.h0 + self.values.y * t - 1 / 2 * 9.81 * t ** 2
+        self.previous_calculation = [X, Y, Z]
+        return self.previous_calculation
