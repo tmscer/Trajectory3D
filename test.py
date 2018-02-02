@@ -3,6 +3,7 @@ import matplotlib.animation as ani
 from matplotlib import style
 import numpy as np
 from mpl_toolkits.mplot3d import axes3d
+import math
 
 import trajectory
 
@@ -23,15 +24,6 @@ def plot_axes(axis, data, label):
 
 
 fig = plt.figure()
-
-t1 = trajectory.Trajectory(x=-8, y=5, z=5, h0=2)
-t1data = t1.calculate_trajectory()
-
-t2 = trajectory.Trajectory(x=10, y=5, z=10)
-t2data = t2.calculate_trajectory()
-
-t3 = trajectory.Trajectory(x=7, y=10, z=6)
-t3data = t3.calculate_trajectory()
 
 ax1 = fig.add_subplot(221, projection='3d')
 ax2 = fig.add_subplot(222)
@@ -57,14 +49,52 @@ ax4.set_title('top view', loc='left')
 ax4.set_xlabel('x-axis', fontsize=10)
 ax4.set_ylabel('z-axis', fontsize=10)
 
-plot_axes(axes, t1data, '1')
-plot_axes(axes, t2data, '2')
-plot_axes(axes, t3data, '3')
 
 ax2.grid(color='grey', linestyle='--', linewidth='0.5')
 ax3.grid(color='grey', linestyle='--', linewidth='0.5')
 ax4.grid(color='grey', linestyle='--', linewidth='0.5')
 
+
+
+def gen():
+    r = list(range(40, 80, 1))
+    r.extend(list(reversed(r))[1:])
+    print(r)
+    i = 0
+    while True:
+        yield r[i] / 2
+        i += 1
+        if not i < len(r):
+            i = 0
+
+
+ge = gen()
+
+t1 = trajectory.Trajectory(xv=8, yv=5, zv=5, x0=5)
+t1data = t1.calculate_trajectory(9.81)
+
+t2 = trajectory.Trajectory(xv=10, yv=5, zv=10, z0=-3)
+t2data = t2.calculate_trajectory(9.81)
+
+t3 = trajectory.Trajectory(xv=7, yv=10, zv=6)
+t3data = t3.calculate_trajectory(9.81)
+
+#plot_axes(axes, t1data, '1')
+#plot_axes(axes, t2data, '2')
+#plot_axes(axes, t3data, '3')
+
+
+def animate(i):
+    global t1, t2, t3, ge, axes
+    y = next(ge)
+    t1.alpha = math.radians(y)
+    clear_axes(axes)
+    plot_axes(axes, t1.calculate_trajectory(), '1')
+    plot_axes(axes, t2.calculate_trajectory(), '2')
+    plot_axes(axes, t3.calculate_trajectory(), '3')
+
+
+anim = ani.FuncAnimation(fig, animate, 500)
 axes_style = 'tight'
 
 ax1.axis(axes_style)

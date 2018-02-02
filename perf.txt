@@ -3266,7 +3266,7 @@
         1    0.000    0.000    0.000    0.000 traceback.py:381(format)
         1    0.000    0.000    0.000    0.000 traceback.py:426(TracebackException)
         1    0.000    0.000    0.000    0.000 trajectory.py:1(<module>)
-        2    0.000    0.000    0.000    0.000 trajectory.py:37(set_using_xyz)
+        2    0.000    0.000    0.000    0.000 trajectory.py:37(_set_using_xyz)
         1    0.000    0.000    0.000    0.000 trajectory.py:5(Trajectory)
         2    0.000    0.000    0.000    0.000 trajectory.py:61(calculate_trajectory)
         2    0.000    0.000    0.000    0.000 trajectory.py:7(__init__)
