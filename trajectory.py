@@ -2,19 +2,24 @@ import math
 import numpy as np
 
 
-def trajectory_calculator(x0, y0, z0, xv, yv, zv, g, time_step=1/16):
+def trajectory_calculator(tr, g=9.81, time_step=1/100):
     t = 0
-    y = y0 + t * (yv - 1 / 2 * g * t)
+    y = tr.y0 + t * (tr.yv - 1 / 2 * g * t)
     while 0 <= y <= 100:
-        x = x0 + xv * t
-        z = z0 + zv * t
+        x = tr.x0 + tr.xv * t
+        z = tr.z0 + tr.zv * t
         yield x, y, z
         t += time_step
-        y = y0 + t * (yv - 1 / 2 * g * t)
-    t = 2 * yv / g
-    x = x0 + xv * t
-    z = z0 + zv * t
+        y = tr.y0 + t * (tr.yv - 1 / 2 * g * t)
+    # Calculate the time at which the object hits the ground (y = 0)
+    t = (tr.yv + math.sqrt(tr.yv ** 2 + 2 * g * tr.y0)) / g
+    x = tr.x0 + tr.xv * t
+    z = tr.z0 + tr.zv * t
     yield x, 0, z
+
+
+def quaternion_trajectory_calculator():
+    pass
 
 
 class Trajectory:
@@ -142,15 +147,14 @@ class Trajectory:
         else:
             return self.__dict__ == other.__dict__
 
-    def calculate_trajectory(self, g=9.81, time_step=1/16):
+    def calculate_trajectory(self, g=9.81, time_step=1/100):
         values = [self._xv, self._yv, self._zv, self._x0, self._y0, self._z0]
-        if self._last_values is not None:
-            if self._last_values == values:
-                return self._last_calc
+        if self._last_values == values:
+            return self._last_calc
         x_values = []
         y_values = []
         z_values = []
-        for x, y, z in trajectory_calculator(self._x0, self._y0, self._z0, self._xv, self._yv, self._zv, g, time_step):
+        for x, y, z in trajectory_calculator(self, g, time_step):
             x_values.append(x)
             y_values.append(y)
             z_values.append(z)
