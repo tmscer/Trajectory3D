@@ -1,22 +1,6 @@
 import math
 import numpy as np
 
-def trajectory_calculator(traj, time_step=1 / 100):
-    t = 0
-    y = traj.y0 + t * (traj.vel_y - 1 / 2 * traj.g * t)
-    while 0 <= y <= 100:
-        x = traj.x0 + traj.vel_x * t
-        z = traj.z0 + traj.vel_z * t
-        yield x, y, z
-        t += time_step
-        y = traj.y0 + t * (traj.vel_y - 1 / 2 * traj.g * t)
-    # Calculate the time at which the object hits the ground (y = 0)
-    yield traj.d_pos()
-
-
-def quaternion_trajectory_calculator():
-    pass
-
 
 class Projectile:
 
@@ -154,17 +138,15 @@ class Projectile:
         else:
             return self.__dict__ == other.__dict__
 
-    def calculate_trajectory(self, time_step=1 / 100):
+    def calculate_trajectory(self, time_step=1 / 25):
         values = [self._vel_x, self._vel_y, self._vel_z, self._x0, self._y0, self._z0]
         if self._last_values == values:
             return self._last_calc
-        x_values = []
-        y_values = []
-        z_values = []
-        for x, y, z in trajectory_calculator(self, time_step):
-            x_values.append(x)
-            y_values.append(y)
-            z_values.append(z)
+        td = self.time_at_d()
+        t_values = np.append(np.arange(0, td, time_step), td)
+        x_values = t_values * self._vel_x + self._x0
+        y_values = t_values * (self._vel_y - 0.5 * self._g * t_values) + self._y0
+        z_values = t_values * self._vel_z + self._z0
         self._last_values = values
         self._last_calc = x_values, y_values, z_values
         return self._last_calc
