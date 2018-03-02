@@ -625,3 +625,56 @@ backend      : TkAgg
 #animation.convert_path: 'convert' # Path to ImageMagick's convert binary.
                                    # On Windows use the full path since convert
                                    # is also the name of a system tool.
+
+#
+lines.linewidth: 2
+lines.solid_capstyle: butt
+
+legend.fancybox: true
+
+# blue		66D9EE
+# red		F92772
+# green		A7E22E
+# orange 	FE9720
+# purple	AE81FF
+# yellow	E6DA74
+
+axes.prop_cycle: cycler('color', ['66D9EE', 'F92772', 'A7E22E', 'FE9720', 'AE81FF', 'E6DA74'])
+axes.facecolor: 0A0A0A
+axes.labelsize: large
+axes.labelcolor: white
+axes.axisbelow: true
+axes.grid: true
+axes.edgecolor: 999999
+axes.linewidth: 3.0
+axes.titlesize: x-large
+#axes.titlecolor: white
+
+text.color: white
+
+xtick.color: white
+ytick.color: white
+
+patch.edgecolor: f0f0f0
+patch.linewidth: 0.5
+
+svg.fonttype: path
+
+grid.linestyle: -
+grid.linewidth: 1.0
+grid.color: 666666
+
+xtick.major.size: 0
+xtick.minor.size: 0
+ytick.major.size: 0
+ytick.minor.size: 0
+
+font.size:12.0
+
+savefig.edgecolor: 999999
+savefig.facecolor: 0A0A0A
+
+figure.subplot.left: 0.10
+figure.subplot.right: 0.95
+figure.subplot.bottom: 0.07
+figure.facecolor: 0A0A0A

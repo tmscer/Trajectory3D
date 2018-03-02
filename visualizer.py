@@ -25,6 +25,7 @@ from user_interface_handler import *
 class Visualizer:
 
     def __init__(self):
+        #pyplot.style.use("monokai")
         self.tk_root = tkinter.Tk()
 
         self.tk_root.wm_title("Trajectory Vis")
@@ -32,18 +33,14 @@ class Visualizer:
         self.figure = pyplot.figure()
 
         self.canvas = FigureCanvasTkAgg(self.figure, master=self.tk_root)
-        self.canvas.get_tk_widget().pack(side=tkinter.LEFT, fill=tkinter.BOTH, expand=0.95)
+        self.canvas.get_tk_widget().pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=0.95)
 
         self.toolbar = NavigationToolbar2TkAgg(self.canvas, self.tk_root)
-
-        del self.toolbar.children['!frame']
-        self.toolbar.children.clear()
-        print(self.toolbar.children.keys())
 
         self.canvas.show()
         self.toolbar.update()
 
-        pyplot.subplots_adjust(left=0.045, right=0.975, top=0.95, bottom=0.06, wspace=0.15)
+        pyplot.subplots_adjust(left=0.045, right=1-0.045, top=0.95, bottom=0.06, wspace=0.15)
 
         self.plotter = None
 
@@ -53,6 +50,9 @@ class Visualizer:
         self.plotter = Plotter(self)
 
         self.ui_handler.update_inputs(self.plotter.proj, 0, False)
+
+        #pyplot.xlim([-10, 10])
+        #pyplot.ylim([-10, 10])
 
         tkinter.mainloop()
 

@@ -4,7 +4,7 @@ import numpy as np
 
 class Projectile:
 
-    def __init__(self, vel_x=None, vel_y=None, vel_z=None, alpha=None, theta=None, v0=None, x0=0, y0=0, z0=0, g=9.81):
+    def __init__(self, plane, vel_x=None, vel_y=None, vel_z=None, alpha=None, theta=None, v0=None, x0=0, y0=0, z0=0, g=9.81):
         if y0 < 0:
             raise ValueError("Initial height y0 cannot be negative: {}".format(y0))
         self._last_values = None
@@ -161,7 +161,7 @@ class Projectile:
         return (self.vel_y + math.sqrt(self.vel_y ** 2 + 2 * self._g * self.y0)) / self._g
 
     def a_pos(self):
-        return (self._x0, self._y0, self._z0)
+        return self._x0, self._y0, self._z0
 
     def b_pos(self):
         tb = self.time_at_b()

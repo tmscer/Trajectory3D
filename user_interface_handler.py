@@ -16,20 +16,18 @@ class UserInterfaceHandler:
     def __init__(self, vis):
         self.vis = vis
         # build the ui
-        self.coord_label = Label(self.vis.tk_root, font=("Helvetica", 15), text="[x , y]")
-        self.coord_label.pack()
-        self.top_spacer = Label(self.vis.tk_root, text="\t\t\t", width=50)
-        self.top_spacer.pack()
+        self.option_window = Toplevel()
+        self.option_window.geometry("500x800+250+125")
+        self.option_window.wm_title("Visualizer Toolbar")
 
-        self.projectile1_frame = Frame(self.vis.tk_root)
-        self.projectile1_frame.pack()
+        self.coord = StringVar(value="[x , y]")
+        self.coord_label = Label(self.option_window, font=("Helvetica", 15), textvariable=self.coord)
+        self.coord_label.grid(row=0, column=0, columnspan=2)
+        self.top_spacer = Label(self.option_window, text="\t\t\t", width=50)
+        self.top_spacer.grid(row=1, column=0)
 
-        self.proj1_label = Label(self.projectile1_frame, font=("Helvetica", 12), text="Trajectory one")
-        self.proj1_label.pack()
-
-        self.projectile1_frame_labels = Frame(self.projectile1_frame)
-
-        self.projectile1_frame_inputs = Frame(self.projectile1_frame)
+        self.proj1_label = Label(self.option_window, font=("Helvetica", 12), text="Trajectory one")
+        self.proj1_label.grid(row=2, column=0)
 
         self.proj1_v0 = DoubleVar()
         self.proj1_vx = DoubleVar()
@@ -41,79 +39,98 @@ class UserInterfaceHandler:
         self.proj1_alpha = DoubleVar()
         self.proj1_theta = DoubleVar()
 
-        self.proj1_v0_input = Entry(self.projectile1_frame_inputs, textvariable=self.proj1_v0)
+        self.proj1_v0_input = Entry(self.option_window, textvariable=self.proj1_v0)
         self.proj1_v0_input.bind('<Return>', lambda event: self.projectile_change(event, self.vis.plotter.proj, 0, self.proj1_v0.get(), 'v0'))
 
-        self.proj1_vx_input = Entry(self.projectile1_frame_inputs, textvariable=self.proj1_vx)
+        self.proj1_vx_input = Entry(self.option_window, textvariable=self.proj1_vx)
         self.proj1_vx_input.bind('<Return>', lambda event: self.projectile_change(event, self.vis.plotter.proj, 0, self.proj1_vx.get(), 'vx'))
 
-        self.proj1_vy_input = Entry(self.projectile1_frame_inputs, textvariable=self.proj1_vy)
+        self.proj1_vy_input = Entry(self.option_window, textvariable=self.proj1_vy)
         self.proj1_vy_input.bind('<Return>', lambda event: self.projectile_change(event, self.vis.plotter.proj, 0, self.proj1_vy.get(), 'vy'))
 
-        self.proj1_vz_input = Entry(self.projectile1_frame_inputs, textvariable=self.proj1_vz)
+        self.proj1_vz_input = Entry(self.option_window, textvariable=self.proj1_vz)
         self.proj1_vz_input.bind('<Return>', lambda event: self.projectile_change(event, self.vis.plotter.proj, 0, self.proj1_vz.get(), 'vz'))
 
-        self.proj1_x0_input = Entry(self.projectile1_frame_inputs, textvariable=self.proj1_x0)
+        self.proj1_x0_input = Entry(self.option_window, textvariable=self.proj1_x0)
         self.proj1_x0_input.bind('<Return>', lambda event: self.projectile_change(event, self.vis.plotter.proj, 0, self.proj1_x0.get(), 'x0'))
 
-        self.proj1_y0_input = Entry(self.projectile1_frame_inputs, textvariable=self.proj1_y0)
+        self.proj1_y0_input = Entry(self.option_window, textvariable=self.proj1_y0)
         self.proj1_y0_input.bind('<Return>', lambda event: self.projectile_change(event, self.vis.plotter.proj, 0, self.proj1_y0.get(), 'y0'))
 
-        self.proj1_z0_input = Entry(self.projectile1_frame_inputs, textvariable=self.proj1_z0)
+        self.proj1_z0_input = Entry(self.option_window, textvariable=self.proj1_z0)
         self.proj1_z0_input.bind('<Return>', lambda event: self.projectile_change(event, self.vis.plotter.proj, 0, self.proj1_z0.get(), 'z0'))
 
-        self.proj1_alpha_input = Scale(self.projectile1_frame_inputs, from_=0, to=90, orient=HORIZONTAL, label="alpha", variable=self.proj1_alpha)
+        self.proj1_alpha_input = Scale(self.option_window, from_=0, to=90, orient=HORIZONTAL, variable=self.proj1_alpha, length=120)
         self.proj1_alpha_input.bind('<B1-Motion>', lambda event: self.projectile_change(event, self.vis.plotter.proj, 0, self.proj1_alpha.get(), 'alpha'))
 
-        self.proj1_theta_input = Scale(self.projectile1_frame_inputs, from_=0, to=360, orient=HORIZONTAL, label="theta", variable=self.proj1_theta)
+        self.proj1_theta_input = Scale(self.option_window, from_=0, to=360, orient=HORIZONTAL, variable=self.proj1_theta, length=120)
         self.proj1_theta_input.bind('<B1-Motion>', lambda event: self.projectile_change(event, self.vis.plotter.proj, 0, self.proj1_theta.get(), 'theta'))
 
-        self.proj1_v0_input.pack()
-        self.proj1_vx_input.pack()
-        self.proj1_vy_input.pack()
-        self.proj1_vz_input.pack()
+        self.proj1_v0_input.grid(row=3, column=1)
+        self.proj1_vx_input.grid(row=4, column=1)
+        self.proj1_vy_input.grid(row=5, column=1)
+        self.proj1_vz_input.grid(row=6, column=1)
 
-        self.proj1_x0_input.pack()
-        self.proj1_y0_input.pack()
-        self.proj1_z0_input.pack()
+        self.proj1_x0_input.grid(row=7, column=1)
+        self.proj1_y0_input.grid(row=8, column=1)
+        self.proj1_z0_input.grid(row=9, column=1)
 
-        self.proj1_alpha_input.pack()
-        self.proj1_theta_input.pack()
+        self.proj1_alpha_input.grid(row=10, column=1)
+        self.proj1_theta_input.grid(row=11, column=1)
 
-        #self.proj1_v0_label = Label(self.projectile1_frame, text="v0:")
-        #self.proj1_vx_label = Label(self.projectile1_frame, text="vx:")
-        #self.proj1_vy_label = Label(self.projectile1_frame, text="vy:")
-        #self.proj1_vz_label = Label(self.projectile1_frame, text="vz:")
+        self.proj1_v0_label = Label(self.option_window, text="v0:")
+        self.proj1_vx_label = Label(self.option_window, text="vx:")
+        self.proj1_vy_label = Label(self.option_window, text="vy:")
+        self.proj1_vz_label = Label(self.option_window, text="vz:")
+        self.proj1_x0_label = Label(self.option_window, text="x0:")
+        self.proj1_y0_label = Label(self.option_window, text="y0:")
+        self.proj1_z0_label = Label(self.option_window, text="z0:")
+        self.proj1_alpha_label = Label(self.option_window, text="alpha:")
+        self.proj1_theta_label = Label(self.option_window, text="theta:")
 
-        #self.proj1_x0_label = Label(self.projectile1_frame, text="x0:")
-        #self.proj1_y0_label = Label(self.projectile1_frame, text="y0:")
-        #self.proj1_z0_label = Label(self.projectile1_frame, text="z0:")
+        self.proj1_v0_label.grid(row=3, column=0)
+        self.proj1_vx_label.grid(row=4, column=0)
+        self.proj1_vy_label.grid(row=5, column=0)
+        self.proj1_vz_label.grid(row=6, column=0)
 
-        #self.proj1_v0_label.pack(side=TOP)
-        #self.proj1_vx_label.pack(side=TOP)
-        #self.proj1_vy_label.pack(side=TOP)
-        #self.proj1_vz_label.pack(side=TOP)
+        self.proj1_x0_label.grid(row=7, column=0)
+        self.proj1_y0_label.grid(row=8, column=0)
+        self.proj1_z0_label.grid(row=9, column=0)
 
-        #self.proj1_x0_label.pack(side=TOP)
-        #self.proj1_y0_label.pack(side=TOP)
-        #self.proj1_z0_label.pack(side=TOP)
-
-        #self.projectile1_frame_labels.pack(side=LEFT, anchor='w')
-        self.projectile1_frame_inputs.pack(side=RIGHT)
+        self.proj1_alpha_label.grid(row=10, column=0)
+        self.proj1_theta_label.grid(row=11, column=0)
 
         self.proj1_point_a = StringVar()
-        self.proj1_point_a_label = Label(self.projectile1_frame, textvariable=self.proj1_point_a)
+        self.proj1_point_a_label = Label(self.option_window, textvariable=self.proj1_point_a)
         self.proj1_point_b = StringVar()
-        self.proj1_point_b_label = Label(self.projectile1_frame, textvariable=self.proj1_point_b)
+        self.proj1_point_b_label = Label(self.option_window, textvariable=self.proj1_point_b)
         self.proj1_point_c = StringVar()
-        self.proj1_point_c_label = Label(self.projectile1_frame, textvariable=self.proj1_point_c)
+        self.proj1_point_c_label = Label(self.option_window, textvariable=self.proj1_point_c)
         self.proj1_point_d = StringVar()
-        self.proj1_point_d_label = Label(self.projectile1_frame, textvariable=self.proj1_point_d)
+        self.proj1_point_d_label = Label(self.option_window, textvariable=self.proj1_point_d)
 
-        self.proj1_point_a_label.pack()
-        self.proj1_point_b_label.pack()
-        self.proj1_point_c_label.pack()
-        self.proj1_point_d_label.pack()
+        self.proj1_point_a_label.grid(row=12, column=0)
+        self.proj1_point_b_label.grid(row=13, column=0)
+        self.proj1_point_c_label.grid(row=14, column=0)
+        self.proj1_point_d_label.grid(row=15, column=0)
+
+        self.plane_label = Label(self.option_window, text="Plane")
+        self.plane_prescript = Label(self.option_window, text="y = ax + bz + c")
+
+        self.plane_a_label = Label(self.option_window)
+        self.plane_b_label = Label(self.option_window)
+        self.plane_c_label = Label(self.option_window)
+
+        self.plane_a = DoubleVar()
+        self.plane_b = DoubleVar()
+        self.plane_c = DoubleVar()
+
+        self.plane_a_input = Entry(self.option_window, textvariable=self.plane_a)
+        self.plane_a_input.bind('<Return>', lambda event: self.plane_change(event, self.vis.plotter.proj, 0, self.plane_a.get(), 'a'))
+        self.plane_a_input = Entry(self.option_window, textvariable=self.plane_b)
+        self.plane_a_input.bind('<Return>', lambda event: self.plane_change(event, self.vis.plotter.proj, 0, self.plane_b.get(), 'b'))
+        self.plane_a_input = Entry(self.option_window, textvariable=self.plane_c)
+        self.plane_a_input.bind('<Return>', lambda event: self.plane_change(event, self.vis.plotter.proj, 0, self.plane_c.get(), 'c'))
 
     @staticmethod
     def number_validation(num):
@@ -122,6 +139,9 @@ class UserInterfaceHandler:
             return True
         except ValueError:
             return False
+
+    def plane_change(self, event, plane, proj, value, prop):
+        pass
 
     def plotter_callback(self):
         self.update_inputs(self.vis.plotter.proj, 0)
@@ -187,7 +207,7 @@ class UserInterfaceHandler:
             pol_y = '-'
         else:
             pol_y = '+'
-        self.coord_label.config(text="[{}{:2.3f} , {}{:2.3f}]".format(pol_x, abs(x), pol_y, abs(y)))
+        self.coord.set("[{}{:2.3f} , {}{:2.3f}]".format(pol_x, abs(x), pol_y, abs(y)))
         return ''
 
     def btn(self, event2=None):
