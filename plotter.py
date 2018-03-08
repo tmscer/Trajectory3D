@@ -51,10 +51,15 @@ class Plotter:
         for axis in self.axes.values():
             axis.axis('equal')
             axis.format_coord = self.vis.ui_handler.display_coords
-            axis.relim()
             #axis.autoscale_view(True, True, True)
-            #axis.autoscale(True)
-            axis.set_autoscale_on(True)
+            axis.autoscale(True)
+            #axis.set_autoscale_on(True)
+
+    def remove_trajectory(self, traj):
+        traj_id = id(traj)
+        for plot in self.plots.values():
+            for obj in plot[traj_id].values():
+                obj.remove()
 
     def set_axes_labels(self, x_label='x-axis', y_label='y-axis', z_label='z-axis'):
         self.axes['xyz'].set_title('3d view x,y,z', loc='left')
@@ -89,9 +94,8 @@ class Plotter:
         self.plots['xyz'][traj_id]['A'] = self.axes['xyz'].plot([X[0]], [Z[0]], [Y[0]], 'wo')[0]  # A
         self.plots['xyz'][traj_id]['B'] = self.axes['xyz'].plot([b_pos[0]], [b_pos[2]], [b_pos[1]], 'wo')[0]  # B
         self.plots['xyz'][traj_id]['C'] = self.axes['xyz'].plot([c_pos[0]], [c_pos[2]], [c_pos[1]], 'wo')[0]  # C
-        self.plots['xyz'][traj_id]['D'] = self.axes['xyz'].plot([X[-1]], [Z[-1]], [Y[-1]], 'k*')[0]  # D
-        self.plots['xyz'][traj_id]['A0'] = self.axes['xyz'].plot([X[0], X[0]], [Z[0], Z[0]], [0, Y[0]], 'k:')[
-            0]  # dotted to A
+        self.plots['xyz'][traj_id]['D'] = self.axes['xyz'].plot([X[-1]], [Z[-1]], [Y[-1]], 'w*')[0]  # D
+        self.plots['xyz'][traj_id]['A0'] = self.axes['xyz'].plot([X[0], X[0]], [Z[0], Z[0]], [0, Y[0]], 'w:')[0]  # dotted to A
 
         self.plots['xy'][traj_id] = {}
 
@@ -99,8 +103,8 @@ class Plotter:
         self.plots['xy'][traj_id]['A'] = self.axes['xy'].plot([X[0]], [Y[0]], 'wo')[0]  # A
         self.plots['xy'][traj_id]['B'] = self.axes['xy'].plot([b_pos[0]], [b_pos[1]], 'wo')[0]  # B
         self.plots['xy'][traj_id]['C'] = self.axes['xy'].plot([c_pos[0]], [c_pos[1]], 'wo')[0]  # C
-        self.plots['xy'][traj_id]['D'] = self.axes['xy'].plot([X[-1]], [Y[-1]], 'k*')[0]  # D
-        self.plots['xy'][traj_id]['A0'] = self.axes['xy'].plot([X[0], X[0]], [0, Y[0]], 'k:')[0]  # dotted to A
+        self.plots['xy'][traj_id]['D'] = self.axes['xy'].plot([X[-1]], [Y[-1]], 'w*')[0]  # D
+        self.plots['xy'][traj_id]['A0'] = self.axes['xy'].plot([X[0], X[0]], [0, Y[0]], 'w:')[0]  # dotted to A
 
         self.plots['zy'][traj_id] = {}
 
@@ -108,8 +112,8 @@ class Plotter:
         self.plots['zy'][traj_id]['A'] = self.axes['zy'].plot([Z[0]], [Y[0]], 'wo')[0]  # A
         self.plots['zy'][traj_id]['B'] = self.axes['zy'].plot([b_pos[2]], [b_pos[1]], 'wo')[0]  # B
         self.plots['zy'][traj_id]['C'] = self.axes['zy'].plot([c_pos[2]], [c_pos[1]], 'wo')[0]  # C
-        self.plots['zy'][traj_id]['D'] = self.axes['zy'].plot([Z[-1]], [Y[-1]], 'k*')[0]  # D
-        self.plots['zy'][traj_id]['A0'] = self.axes['zy'].plot([Z[0], Z[0]], [0, Y[0]], 'k:')[0]  # dotted to A
+        self.plots['zy'][traj_id]['D'] = self.axes['zy'].plot([Z[-1]], [Y[-1]], 'w*')[0]  # D
+        self.plots['zy'][traj_id]['A0'] = self.axes['zy'].plot([Z[0], Z[0]], [0, Y[0]], 'w:')[0]  # dotted to A
 
         self.plots['xz'][traj_id] = {}
 
@@ -117,14 +121,25 @@ class Plotter:
         self.plots['xz'][traj_id]['A'] = self.axes['xz'].plot([X[0]], [Z[0]], 'wo')[0]  # A
         self.plots['xz'][traj_id]['B'] = self.axes['xz'].plot([b_pos[0]], [b_pos[2]], 'wo')[0]  # B
         self.plots['xz'][traj_id]['C'] = self.axes['xz'].plot([c_pos[0]], [c_pos[2]], 'wo')[0]  # C
-        self.plots['xz'][traj_id]['D'] = self.axes['xz'].plot([X[-1]], [Z[-1]], 'k*')[0]  # D
+        self.plots['xz'][traj_id]['D'] = self.axes['xz'].plot([X[-1]], [Z[-1]], 'w*')[0]  # D
 
     def plot_plane(self, plane):
-        coords = plane.get_coords(-30, 30, -30, 30)
+        coords = plane.get_coords(self.proj._last_calc[0][0], self.proj._last_calc[0][-1], self.proj._last_calc[2][0], self.proj._last_calc[2][-1])
         x = coords[0]
         y = coords[1]
         z = coords[2]
-        self.axes['xyz'].plot_trisurf(x, z, y)
+        plane_id = id(plane)
+        self.plots['xyz'][plane_id] = {}
+        self.plots['xyz'][plane_id]['main'] = self.axes['xyz'].plot_trisurf(x, z, y)
+
+        self.plots['xy'][plane_id] = {}
+        self.plots['xy'][plane_id]['main'] = self.axes['xy'].plot(x, y)[0]
+
+        self.plots['zy'][plane_id] = {}
+        self.plots['zy'][plane_id]['main'] = self.axes['zy'].plot(z, y)[0]
+
+        self.plots['xz'][plane_id] = {}
+        self.plots['xz'][plane_id]['main'] = self.axes['xz'].plot(x, z)[0]
 
     def clear_axes(self):
         for axis in self.axes:

@@ -5,8 +5,7 @@ import numpy as np
 class Projectile:
 
     def __init__(self, plane, vel_x=None, vel_y=None, vel_z=None, alpha=None, theta=None, v0=None, x0=0, y0=0, z0=0, g=9.81):
-        if y0 < 0:
-            raise ValueError("Initial height y0 cannot be negative: {}".format(y0))
+        self._plane = plane
         self._last_values = None
         self._last_calc = None
         self._g = g
@@ -138,7 +137,7 @@ class Projectile:
         else:
             return self.__dict__ == other.__dict__
 
-    def calculate_trajectory(self, time_step=1 / 25):
+    def calculate_trajectory(self, time_step=1 / 10):
         values = [self._vel_x, self._vel_y, self._vel_z, self._x0, self._y0, self._z0]
         if self._last_values == values:
             return self._last_calc

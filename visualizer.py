@@ -25,7 +25,7 @@ from user_interface_handler import *
 class Visualizer:
 
     def __init__(self):
-        #pyplot.style.use("monokai")
+        pyplot.style.use("monokai")
         self.tk_root = tkinter.Tk()
 
         self.tk_root.wm_title("Trajectory Vis")
@@ -49,7 +49,8 @@ class Visualizer:
 
         self.plotter = Plotter(self)
 
-        self.ui_handler.update_inputs(self.plotter.proj, 0, False)
+        self.ui_handler.update_projectile_inputs(self.plotter.proj)
+        self.ui_handler.update_plane_inputs(self.plotter.plane)
 
         #pyplot.xlim([-10, 10])
         #pyplot.ylim([-10, 10])
