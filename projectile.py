@@ -182,7 +182,10 @@ class Projectile:
         dis = pb ** 2 - 2 * self._g * (self._plane.a * self._x0 + self._plane.b + self._plane.c - self._y0)
         if dis < 0:
             return None
-        return (- pb + math.sqrt(dis)) / self._g
+        sqr = math.sqrt(dis)
+        t1 = (- pb + sqr) / self._g
+        t2 = (- pb - sqr) / self._g
+        return t1 if t2 < 0 else t2
 
     def a_pos(self):
         return self._x0, self._y0, self._z0

@@ -133,17 +133,17 @@ class Plotter:
         self.plot_plane_3d(plane_id, x, y, z)
 
         self.plots['xy'][plane_id] = {}
-        self.plots['xy'][plane_id]['main'] = self.axes['xy'].plot(x, y)[0]
+        self.plots['xy'][plane_id]['main'] = self.axes['xy'].plot(x, y, color=(0.5, 0.5, 0.5))[0]
 
         self.plots['zy'][plane_id] = {}
-        self.plots['zy'][plane_id]['main'] = self.axes['zy'].plot(z, y)[0]
+        self.plots['zy'][plane_id]['main'] = self.axes['zy'].plot(z, y, color=(0.5, 0.5, 0.5))[0]
 
         self.plots['xz'][plane_id] = {}
-        self.plots['xz'][plane_id]['main'] = self.axes['xz'].plot(x, z)[0]
+        self.plots['xz'][plane_id]['main'] = self.axes['xz'].plot(x, z, color=(0.5, 0.5, 0.5))[0]
 
     def plot_plane_3d(self, plane_id, x, y, z):
         self.plots['xyz'][plane_id] = {}
-        self.plots['xyz'][plane_id]['main'] = self.axes['xyz'].plot_trisurf(x, z, y)
+        self.plots['xyz'][plane_id]['main'] = self.axes['xyz'].plot_trisurf(x, z, y, color=(0.5, 0.5, 0.5))
 
     def clear_axes(self):
         for axis in self.axes:

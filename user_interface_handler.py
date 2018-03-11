@@ -197,6 +197,7 @@ class UserInterfaceHandler:
             angle = True
             plane.beta = math.radians(value)
         self.update_plane_inputs(plane, angle)
+        self.update_projectile_inputs(self.vis.plotter.proj, True)
         self.update_plane(plane)
         self.update_traj(self.vis.plotter.proj)
         self.vis.canvas.draw()

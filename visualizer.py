@@ -8,12 +8,12 @@ try:
     from matplotlib import pyplot
     from matplotlib import style
     from mpl_toolkits.mplot3d import axes3d
-    from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 except ImportError:
     raise ImportError("Visualizer requires module Matplotlib")
 
 try:
     import tkinter
+    from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
 except ImportError:
     raise ImportError("Visualizer requires module tkinter")
 
