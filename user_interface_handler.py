@@ -183,6 +183,7 @@ class UserInterfaceHandler:
         self.plane_update_btn.grid(row=next(row_counter), column=0)
 
     def plane_change(self, event, plane, value, prop):
+        angle = False
         if prop == 'a':
             plane.a = value
         elif prop == 'b':
@@ -190,26 +191,55 @@ class UserInterfaceHandler:
         elif prop == 'c':
             plane.c = value
         elif prop == 'alpha':
+            angle = True
             plane.alpha = math.radians(value)
         elif prop == 'beta':
+            angle = True
             plane.beta = math.radians(value)
-        self.update_plane_inputs(plane)
+        self.update_plane_inputs(plane, angle)
         self.update_plane(plane)
+        self.update_traj(self.vis.plotter.proj)
+        self.vis.canvas.draw()
 
-    def update_plane_inputs(self, plane):
+    def update_plane_inputs(self, plane, angle):
         self.plane_a.set("{:.2f}".format(plane.a))
         self.plane_b.set("{:.2f}".format(plane.b))
         c = plane.c
         self.plane_c.set("{:.2f}".format(plane.c))
-        self.plane_alpha.set("{:.2f}".format(plane.alpha))
-        self.plane_beta.set("{:.2f}".format(plane.beta))
+        if not angle:
+            self.plane_alpha.set("{:.2f}".format(plane.alpha))
+            self.plane_beta.set("{:.2f}".format(plane.beta))
 
     def update_plane(self, plane):
-        self.vis.plotter.remove_trajectory(plane)
-        self.vis.plotter.plot_plane(plane)
-        self.update_projectile(self.vis.plotter.proj)
+        plots = self.vis.plotter.plots
+
+        plane_id = id(plane)
+
+        coords = plane.get_coords(self.vis.plotter.proj._last_calc[0][0],
+                                   self.vis.plotter.proj._last_calc[0][-1],
+                                   self.vis.plotter.proj._last_calc[2][0],
+                                   self.vis.plotter.proj._last_calc[2][-1])
+        x = coords[0]
+        y = coords[1]
+        z = coords[2]
+
+        for obj in plots['xyz'][plane_id].values():
+            obj.remove()
+
+        self.vis.plotter.plot_plane_3d(plane_id, x, y, z)
+
+        plots['xy'][plane_id]['main'].set_xdata(x)
+        plots['xy'][plane_id]['main'].set_ydata(y)
+
+        plots['zy'][plane_id]['main'].set_xdata(z)
+        plots['zy'][plane_id]['main'].set_ydata(y)
+
+        plots['xz'][plane_id]['main'].set_xdata(x)
+        plots['xz'][plane_id]['main'].set_ydata(z)
+        self.vis.canvas.draw()
 
     def projectile_change(self, event, traj, value, prop):
+        angle = False
         if prop == 'v0':
             traj.v0 = value
         elif prop == 'vx':
@@ -221,19 +251,20 @@ class UserInterfaceHandler:
         elif prop == 'x0':
             traj.x0 = value
         elif prop == 'y0':
-            if value < 0:
-                return
             traj.y0 = value
         elif prop == 'z0':
             traj.z0 = value
         elif prop == 'alpha':
+            angle = True
             traj.alpha = math.radians(value)
         elif prop == 'theta':
+            angle = True
             traj.theta = math.radians(value)
-        self.update_projectile_inputs(traj)
-        self.update_traj(traj)
+        self.update_projectile_inputs(traj, angle)
+        self.update_traj(self.vis.plotter.proj)
+        self.vis.canvas.draw()
 
-    def update_projectile_inputs(self, traj):
+    def update_projectile_inputs(self, traj, angle):
         self.proj1_v0.set("{:.2f}".format(traj.v0))
         self.proj1_vx.set("{:.2f}".format(traj.vel_x))
         self.proj1_vy.set("{:.2f}".format(traj.vel_y))
@@ -241,8 +272,9 @@ class UserInterfaceHandler:
         self.proj1_x0.set("{:.2f}".format(traj.x0))
         self.proj1_y0.set("{:.2f}".format(traj.y0))
         self.proj1_z0.set("{:.2f}".format(traj.z0))
-        self.proj1_alpha.set(math.degrees(traj.alpha))
-        self.proj1_theta.set(math.degrees(traj.theta))
+        if not angle:
+            self.proj1_alpha.set(math.degrees(traj.alpha))
+            self.proj1_theta.set(math.degrees(traj.theta))
         a_pos = traj.a_pos()
         self.proj1_point_a.set("A = [{:.2f} , {:.2f} , {:.2f}]".format(a_pos[0], a_pos[1], a_pos[2]))
         b_pos = traj.b_pos()
@@ -251,15 +283,6 @@ class UserInterfaceHandler:
         self.proj1_point_c.set("C = [{:.2f} , {:.2f} , {:.2f}]".format(c_pos[0], c_pos[1], c_pos[2]))
         d_pos = traj.d_pos()
         self.proj1_point_d.set("D = [{:.2f} , {:.2f} , {:.2f}]".format(d_pos[0], d_pos[1], d_pos[2]))
-
-    def update_projectile(self, traj):
-        #for axis in self.vis.plotter.axes.values():
-        #    axis.clear()
-        self.vis.plotter.remove_trajectory(traj)
-        self.vis.plotter.plot_projectile(traj)
-        #self.vis.plotter.set_axes_props()
-        #self.vis.plotter.set_axes_labels()
-        self.vis.canvas.draw()
 
     def display_coords(self, x, y):
         if x < 0:
@@ -329,5 +352,3 @@ class UserInterfaceHandler:
         plots['xz'][traj_id]['C'].set_ydata([c_pos[2]])
         plots['xz'][traj_id]['D'].set_xdata([X[-1]])
         plots['xz'][traj_id]['D'].set_ydata([Z[-1]])
-
-        self.vis.canvas.draw()

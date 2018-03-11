@@ -28,7 +28,7 @@ class Plotter:
         for key in self.axes.keys():
             self.plots[key] = {}
 
-        self.plane = Plane(1/20, 1/20, -3)
+        self.plane = Plane(alpha=-np.pi/4, beta=0, c=-10)
 
         self.proj = Projectile(self.plane, vel_x=10, vel_y=8, vel_z=25)
         self.plot_projectile(self.proj)
@@ -129,8 +129,8 @@ class Plotter:
         y = coords[1]
         z = coords[2]
         plane_id = id(plane)
-        self.plots['xyz'][plane_id] = {}
-        self.plots['xyz'][plane_id]['main'] = self.axes['xyz'].plot_trisurf(x, z, y)
+
+        self.plot_plane_3d(plane_id, x, y, z)
 
         self.plots['xy'][plane_id] = {}
         self.plots['xy'][plane_id]['main'] = self.axes['xy'].plot(x, y)[0]
@@ -140,6 +140,10 @@ class Plotter:
 
         self.plots['xz'][plane_id] = {}
         self.plots['xz'][plane_id]['main'] = self.axes['xz'].plot(x, z)[0]
+
+    def plot_plane_3d(self, plane_id, x, y, z):
+        self.plots['xyz'][plane_id] = {}
+        self.plots['xyz'][plane_id]['main'] = self.axes['xyz'].plot_trisurf(x, z, y)
 
     def clear_axes(self):
         for axis in self.axes:

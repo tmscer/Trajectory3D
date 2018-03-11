@@ -49,8 +49,8 @@ class Visualizer:
 
         self.plotter = Plotter(self)
 
-        self.ui_handler.update_projectile_inputs(self.plotter.proj)
-        self.ui_handler.update_plane_inputs(self.plotter.plane)
+        self.ui_handler.update_projectile_inputs(self.plotter.proj, True)
+        self.ui_handler.update_plane_inputs(self.plotter.plane, True)
 
         #pyplot.xlim([-10, 10])
         #pyplot.ylim([-10, 10])

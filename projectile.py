@@ -4,7 +4,8 @@ import numpy as np
 
 class Projectile:
 
-    def __init__(self, plane, vel_x=None, vel_y=None, vel_z=None, alpha=None, theta=None, v0=None, x0=0, y0=0, z0=0, g=9.81):
+    def __init__(self, plane, vel_x=None, vel_y=None, vel_z=None, alpha=None, theta=None, v0=None, x0=0, y0=0, z0=0,
+                 g=9.81):
         self._plane = plane
         self._last_values = None
         self._last_calc = None
@@ -128,6 +129,14 @@ class Projectile:
             raise ValueError("Gravitational acceleration cannot be 0")
         self._g = value
 
+    @property
+    def plane(self):
+        return self._plane
+
+    @plane.setter
+    def plane(self, value):
+        self._plane = value
+
     def __str__(self):
         return str(self.__dict__)
 
@@ -137,8 +146,17 @@ class Projectile:
         else:
             return self.__dict__ == other.__dict__
 
+    def x_pos(self, t):
+        return self._x0 + self._vel_x * t
+
+    def y_pos(self, t):
+        return self._y0 + self._vel_y * t - 0.5 * self._g * t ** 2
+
+    def z_pos(self, t):
+        return self._z0 + self._vel_z * t
+
     def calculate_trajectory(self, time_step=1 / 10):
-        values = [self._vel_x, self._vel_y, self._vel_z, self._x0, self._y0, self._z0]
+        values = [self._vel_x, self._vel_y, self._vel_z, self._x0, self._y0, self._z0, self._plane.a, self._plane.b, self._plane.c]
         if self._last_values == values:
             return self._last_calc
         td = self.time_at_d()
@@ -156,26 +174,35 @@ class Projectile:
     def time_at_c(self):
         return 2 * self.time_at_b()
 
+    #def time_at_d(self):
+    #    return (self.vel_y + math.sqrt(self.vel_y ** 2 + 2 * self._g * self.y0)) / self._g
+
     def time_at_d(self):
-        return (self.vel_y + math.sqrt(self.vel_y ** 2 + 2 * self._g * self.y0)) / self._g
+        pb = self._plane.a * self._vel_x + self._plane.b * self._vel_z - self.vel_y
+        dis = pb ** 2 - 2 * self._g * (self._plane.a * self._x0 + self._plane.b + self._plane.c - self._y0)
+        if dis < 0:
+            return None
+        return (- pb + math.sqrt(dis)) / self._g
 
     def a_pos(self):
         return self._x0, self._y0, self._z0
 
     def b_pos(self):
         tb = self.time_at_b()
-        return self._vel_x * tb + self._x0, \
-               self._y0 + tb * (self._vel_y - 1 / 2 * self._g * tb), \
-               self._vel_z * tb + self._z0
+        return self.x_pos(tb), \
+               self.y_pos(tb), \
+               self.z_pos(tb)
 
     def c_pos(self):
         tc = self.time_at_c()
-        return self._vel_x * tc + self._x0, \
+        return self.x_pos(tc), \
                self._y0, \
-               self._vel_z * tc + self._z0
+               self.z_pos(tc)
 
     def d_pos(self):
         td = self.time_at_d()
-        return self._vel_x * td + self._x0, \
-               0, \
-               self._vel_z * td + self._z0
+        if td is None:
+            return None, None, None
+        return self.x_pos(td), \
+               self.y_pos(td), \
+               self.z_pos(td)
