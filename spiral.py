@@ -17,7 +17,16 @@ class Spiral:
         self._phi0 = phi0
         self._g = g
         self._plane = plane
-        self.unmodifiable = 'radius'  # other options: omega (meaning period and frequency too), velocity, acceleration
+        self._locked_var = 'radius'  # other options: omega (meaning period and frequency too), velocity, acceleration
+
+    @property
+    def locked_var(self):
+        return self._locked_var
+
+    @locked_var.setter
+    def locked_var(self, value):
+        self._locked_var = value
+        print(self._locked_var)
 
     @property
     def radius(self):
@@ -25,18 +34,18 @@ class Spiral:
 
     @radius.setter
     def radius(self, value):
-        if self.unmodifiable == 'radius':
+        if self.locked_var == 'radius':
             return
         self._radius = value
-        if self.unmodifiable == 'omega':
+        if self.locked_var == 'omega':
             self._velocity = self._omega * self._radius
             self._acceleration = self._velocity ** 2 / self._radius
-        elif self.unmodifiable == 'velocity':
+        elif self.locked_var == 'velocity':
             self._omega = self._velocity / self._radius
             self._period = 2 * np.pi / self._omega
             self._frequency = 1 / self._period
             self._acceleration = self._velocity ** 2 / self._radius
-        elif self.unmodifiable == 'acceleration':
+        elif self.locked_var == 'acceleration':
             self._velocity = math.sqrt(self._acceleration * self._radius)
             self._omega = self._velocity / self._radius
             self._period = 2 * np.pi / self._omega
@@ -48,18 +57,18 @@ class Spiral:
 
     @velocity.setter
     def velocity(self, value):
-        if self.unmodifiable == 'velocity':
+        if self.locked_var == 'velocity':
             return
         self._velocity = value
-        if self.unmodifiable == 'omega':
+        if self.locked_var == 'omega':
             self._radius = self._velocity / self._omega
             self._acceleration = self._velocity ** 2 / self._radius
-        elif self.unmodifiable == 'radius':
+        elif self.locked_var == 'radius':
             self._omega = self._velocity / self._radius
             self._period = 2 * np.pi / self._omega
             self._frequency = 1 / self._period
             self._acceleration = self._velocity ** 2 / self._radius
-        elif self.unmodifiable == 'acceleration':
+        elif self.locked_var == 'acceleration':
             self._radius = self._velocity ** 2 / self._acceleration
             self._omega = self._velocity / self._radius
             self._period = 2 * np.pi / self._omega
@@ -71,18 +80,18 @@ class Spiral:
 
     @acceleration.setter
     def acceleration(self, value):
-        if self.unmodifiable == 'acceleration':
+        if self.locked_var == 'acceleration':
             return
         self._acceleration = value
-        if self.unmodifiable == 'omega':
+        if self.locked_var == 'omega':
             self._radius = self._acceleration / (self._omega ** 2)
             self._velocity = self._omega * self._radius
-        elif self.unmodifiable == 'radius':
+        elif self.locked_var == 'radius':
             self._velocity = math.sqrt(self._acceleration * self._radius)
             self._omega = self._velocity / self._radius
             self._period = 2 * np.pi / self._omega
             self._frequency = 1 / self._period
-        elif self.unmodifiable == 'velocity':
+        elif self.locked_var == 'velocity':
             self._radius = self._velocity ** 2 / self._acceleration
             self._omega = self._velocity / self._radius
             self._period = 2 * np.pi / self._omega
@@ -94,18 +103,18 @@ class Spiral:
 
     @omega.setter
     def omega(self, value):
-        if self.unmodifiable == 'omega':
+        if self.locked_var == 'omega':
             return
         self._omega = value
         self._period = 2 * np.pi / self._omega
         self._frequency = 1 / self._period
-        if self.unmodifiable == 'radius':
+        if self.locked_var == 'radius':
             self._velocity = self._omega * self._radius
             self._acceleration = self._velocity ** 2 / self._radius
-        elif self.unmodifiable == 'velocity':
+        elif self.locked_var == 'velocity':
             self._radius = self._velocity / self._omega
             self._acceleration = self._velocity ** 2 / self._radius
-        elif self.unmodifiable == 'acceleration':
+        elif self.locked_var == 'acceleration':
             self._radius = self._omega ** 2 * self._acceleration
             self._velocity = self._omega * self._radius
 
@@ -115,18 +124,18 @@ class Spiral:
 
     @frequency.setter
     def frequency(self, value):
-        if self.unmodifiable == 'omega':
+        if self.locked_var == 'omega':
             return
         self._frequency = value
         self._omega = 2 * np.pi * self._frequency
         self._period = 2 * np.pi / self._omega
-        if self.unmodifiable == 'radius':
+        if self.locked_var == 'radius':
             self._velocity = self._omega * self._radius
             self._acceleration = self._velocity ** 2 / self._radius
-        elif self.unmodifiable == 'velocity':
+        elif self.locked_var == 'velocity':
             self._radius = self._velocity / self._omega
             self._acceleration = self._velocity ** 2 / self._radius
-        elif self.unmodifiable == 'acceleration':
+        elif self.locked_var == 'acceleration':
             self._radius = self._omega ** 2 * self._acceleration
             self._velocity = self._omega * self._radius
 
@@ -136,18 +145,18 @@ class Spiral:
 
     @period.setter
     def period(self, value):
-        if self.unmodifiable == 'omega':
+        if self.locked_var == 'omega':
             return
         self._period = value
         self._omega = 2 * np.pi / self._period
         self._frequency = 1 / self._period
-        if self.unmodifiable == 'radius':
+        if self.locked_var == 'radius':
             self._velocity = self._omega * self._radius
             self._acceleration = self._velocity ** 2 / self._radius
-        elif self.unmodifiable == 'velocity':
+        elif self.locked_var == 'velocity':
             self._radius = self._velocity / self._omega
             self._acceleration = self._velocity ** 2 / self._radius
-        elif self.unmodifiable == 'acceleration':
+        elif self.locked_var == 'acceleration':
             self._radius = self._omega ** 2 * self._acceleration
             self._velocity = self._omega * self._radius
 

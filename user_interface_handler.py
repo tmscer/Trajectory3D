@@ -158,6 +158,21 @@ class UserInterfaceHandler:
         self.spiral_label.grid(row=next(row_counter), column=0, columnspan=2)
         self.spiral_prescript.grid(row=next(row_counter), column=0, columnspan=2)
 
+        self.spiral_locked_var = StringVar(self.option_window)
+        self.spiral_locked_var.set('radius')  # default value
+
+        def lm(*args):
+            self.vis.plotter.spiral.locked_var = self.spiral_locked_var.get()
+
+        self.spiral_locked_var.trace('w', lm)
+
+        self.spiral_locked_var_label = Label(self.option_window, text='Locked Variable')
+        self.spiral_locked_var_input = OptionMenu(self.option_window, self.spiral_locked_var,
+                                                    'radius', 'velocity', 'omega', 'acceleration')
+        unmodif_row = next(row_counter)
+        self.spiral_locked_var_label.grid(row=unmodif_row, column=0)
+        self.spiral_locked_var_input.grid(row=unmodif_row, column=1)
+
         self.spiral_value_names = ['radius', 'velocity', 'omega', 'acceleration', 'period', 'frequency', 'x0', 'y0',
                                    'z0', 'phi0']
 
@@ -288,6 +303,8 @@ class UserInterfaceHandler:
             spiral.y0 = value
         elif prop == 'z0':
             spiral.z0 = value
+        elif prop == 'phi0':
+            spiral.phi0 = value
         self.update_spiral_inputs(spiral)
         self.update_spiral(self.vis.plotter.spiral)
         self.vis.canvas.draw()
