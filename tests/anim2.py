@@ -7,9 +7,9 @@ import numpy as np
 import math
 import time
 
-plt.style.use("monokai")
+#plt.style.use("monokai")
 
-fig = plt.figure()
+fig = plt.figure(figsize=(10, 5))
 
 #sound_graph = fig.add_subplot(211)
 #circled_graph = fig.add_subplot(234)
@@ -32,20 +32,15 @@ circle_graph.plot(circle.real, circle.imag, 'w.', linewidth=0.25)
 circle_graph.plot([-1.25, 1.25], [0, 0], 'w', linewidth=1)  # x axis
 circle_graph.plot([0, 0], [-1.25, 1.25], 'w', linewidth=1)  # y axis
 
-snd_freq1 = 1  # per second
+snd_freq1 = 2  # per second
 snd_period1 = 1 / snd_freq1
-
-snd_freq2 = 2  # per second
-snd_period2 = 1 / snd_freq2
-
 omega1 = 2 * np.pi * snd_freq1
-omega2 = 2 * np.pi * snd_freq2
 
-xf = np.arange(0, 10 * 1 / snd_freq1 + step, step)
-func = 2 * np.sin(omega1 * xf) + c + np.sin(omega2 * xf)
+xf = np.arange(0, 5 * 1 / snd_freq1 + step, step)
+func = np.sin(omega1 * xf) + np.sin(2 * np.pi * 3 * xf) + np.sin(2 * np.pi * 5 * xf) + np.sin(2 * np.pi * 7 * xf)
 
-sndx = np.arange(-3 * snd_period1, 20 * snd_period1 + step, step)
-sndy = 2 * np.sin(omega1 * sndx) + c + np.sin(omega2 * sndx)
+sndx = np.arange(-3 * snd_period1, 10 * snd_period1 + step, step)
+sndy = np.sin(omega1 * sndx) + np.sin(2 * np.pi * 3 * sndx) + np.sin(2 * np.pi * 5 * sndx) + np.sin(2 * np.pi * 7 * sndx)
 
 sound_graph.plot(sndx, sndy, linewidth=1)
 
@@ -80,10 +75,12 @@ four_y2 = []
 fourier_line1 = fourier_graph.plot(four_x, four_y1, linewidth=1)[0]
 fourier_line2 = fourier_graph.plot(four_x, four_y2, linewidth=1)[0]
 
+fourier_graph.set_ylim(-2, 2)
+fourier_graph.set_xlim(-0.5, 10)
 
 def animate(i):
     global four_x, four_y1, fourier_line1, fourier_line2, fourier_graph
-    freq = draw_freq + i / 500
+    freq = draw_freq + i / 250
     if (freq + 1 / 500) % 1 == 0:
         print(freq)
         #time.sleep(3)
@@ -98,12 +95,11 @@ def animate(i):
     four_x.append(round(freq, 3))
     four_y1.append(avg_loc[0])
     four_y2.append(avg_loc[1])
-    #fourier_line.set_data(four_x, four_y)
-    fourier_graph.clear()
-    var1 = fourier_graph.plot(four_x, four_y1, linewidth=1)[0]
-    var2 = fourier_graph.plot(four_x, four_y2, linewidth=1)[0]
+    fourier_line1.set_data(four_x, four_y1)
+    fourier_line2.set_data(four_x, four_y2)
+    #plt.draw()
 
-    return line, avg_point,
+    return line, avg_point, fourier_line1, fourier_line2
 
 
 if not drawing:

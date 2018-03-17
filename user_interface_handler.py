@@ -23,6 +23,8 @@ class UserInterfaceHandler:
         self.option_window.geometry("300x700+50+50")
         self.option_window.wm_title("Visualizer Toolbar")
 
+        # self.scrollbar = Scrollbar(self.option_window, orient="vertical", command=self.vis.canvas.yview)
+
         row_counter = (x for x in itertools.count(start=0, step=1))
 
         self.coord = StringVar(value="[x , y]")
@@ -31,6 +33,7 @@ class UserInterfaceHandler:
         self.top_spacer = Label(self.option_window, text="\t\t\t", width=5)
         self.top_spacer.grid(row=next(row_counter), column=0)
 
+        # PROJECTILE
         self.proj1_label = Label(self.option_window, font=("Helvetica", 12), text="Trajectory one", width=20)
         self.proj1_label.grid(row=next(row_counter), column=0, columnspan=2)
 
@@ -45,31 +48,51 @@ class UserInterfaceHandler:
         self.proj1_theta = DoubleVar()
 
         self.proj1_v0_input = Entry(self.option_window, textvariable=self.proj1_v0)
-        self.proj1_v0_input.bind('<Return>', lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_v0.get(), 'v0'))
+        self.proj1_v0_input.bind('<Return>',
+                                 lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_v0.get(),
+                                                                      'v0'))
 
         self.proj1_vx_input = Entry(self.option_window, textvariable=self.proj1_vx)
-        self.proj1_vx_input.bind('<Return>', lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_vx.get(), 'vx'))
+        self.proj1_vx_input.bind('<Return>',
+                                 lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_vx.get(),
+                                                                      'vx'))
 
         self.proj1_vy_input = Entry(self.option_window, textvariable=self.proj1_vy)
-        self.proj1_vy_input.bind('<Return>', lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_vy.get(), 'vy'))
+        self.proj1_vy_input.bind('<Return>',
+                                 lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_vy.get(),
+                                                                      'vy'))
 
         self.proj1_vz_input = Entry(self.option_window, textvariable=self.proj1_vz)
-        self.proj1_vz_input.bind('<Return>', lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_vz.get(), 'vz'))
+        self.proj1_vz_input.bind('<Return>',
+                                 lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_vz.get(),
+                                                                      'vz'))
 
         self.proj1_x0_input = Entry(self.option_window, textvariable=self.proj1_x0)
-        self.proj1_x0_input.bind('<Return>', lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_x0.get(), 'x0'))
+        self.proj1_x0_input.bind('<Return>',
+                                 lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_x0.get(),
+                                                                      'x0'))
 
         self.proj1_y0_input = Entry(self.option_window, textvariable=self.proj1_y0)
-        self.proj1_y0_input.bind('<Return>', lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_y0.get(), 'y0'))
+        self.proj1_y0_input.bind('<Return>',
+                                 lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_y0.get(),
+                                                                      'y0'))
 
         self.proj1_z0_input = Entry(self.option_window, textvariable=self.proj1_z0)
-        self.proj1_z0_input.bind('<Return>', lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_z0.get(), 'z0'))
+        self.proj1_z0_input.bind('<Return>',
+                                 lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_z0.get(),
+                                                                      'z0'))
 
-        self.proj1_alpha_input = Scale(self.option_window, tickinterval=0.01, from_=0, to=90, orient=HORIZONTAL, variable=self.proj1_alpha, length=120)
-        self.proj1_alpha_input.bind('<B1-Motion>', lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_alpha.get(), 'alpha'))
+        self.proj1_alpha_input = Scale(self.option_window, tickinterval=0.01, from_=0, to=90, orient=HORIZONTAL,
+                                       variable=self.proj1_alpha, length=120)
+        self.proj1_alpha_input.bind('<B1-Motion>', lambda event: self.projectile_change(event, self.vis.plotter.proj,
+                                                                                        self.proj1_alpha.get(),
+                                                                                        'alpha'))
 
-        self.proj1_theta_input = Scale(self.option_window, tickinterval=0.01, from_=0, to=360, orient=HORIZONTAL, variable=self.proj1_theta, length=120)
-        self.proj1_theta_input.bind('<B1-Motion>', lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_theta.get(), 'theta'))
+        self.proj1_theta_input = Scale(self.option_window, tickinterval=0.01, from_=0, to=360, orient=HORIZONTAL,
+                                       variable=self.proj1_theta, length=120)
+        self.proj1_theta_input.bind('<B1-Motion>', lambda event: self.projectile_change(event, self.vis.plotter.proj,
+                                                                                        self.proj1_theta.get(),
+                                                                                        'theta'))
 
         v0_row = next(row_counter)
         vx_row = next(row_counter)
@@ -123,15 +146,70 @@ class UserInterfaceHandler:
         self.proj1_point_d = StringVar()
         self.proj1_point_d_label = Label(self.option_window, textvariable=self.proj1_point_d)
 
-        self.proj1_point_a_label.grid(row=next(row_counter), column=0)
-        self.proj1_point_b_label.grid(row=next(row_counter), column=0)
-        self.proj1_point_c_label.grid(row=next(row_counter), column=0)
-        self.proj1_point_d_label.grid(row=next(row_counter), column=0)
+        self.proj1_point_a_label.grid(row=next(row_counter), column=0, columnspan=2)
+        self.proj1_point_b_label.grid(row=next(row_counter), column=0, columnspan=2)
+        self.proj1_point_c_label.grid(row=next(row_counter), column=0, columnspan=2)
+        self.proj1_point_d_label.grid(row=next(row_counter), column=0, columnspan=2)
 
+        # SPIRAL
+        self.spiral_label = Label(self.option_window, text="Spiral", font=("Helvetica", 12), width=20)
+        self.spiral_prescript = Label(self.option_window,
+                                      text="x(t) = r * cos (omega * t) + x0\ny(t) = y0 - 0.5 * g * t ** 2\nz(t) = r * sin(omega * t) + z0")
+        self.spiral_label.grid(row=next(row_counter), column=0, columnspan=2)
+        self.spiral_prescript.grid(row=next(row_counter), column=0, columnspan=2)
+
+        self.spiral_value_names = ['radius', 'velocity', 'omega', 'acceleration', 'period', 'frequency', 'x0', 'y0',
+                                   'z0', 'phi0']
+
+        self.spiral_vars = {label: DoubleVar() for label in self.spiral_value_names}
+
+        self.spiral_labels = {label: Label(self.option_window, text=label) for label in self.spiral_value_names}
+        self.spiral_inputs = {label: Entry(self.option_window, textvariable=self.spiral_vars[label]) for label in
+                              self.spiral_value_names}
+
+        self.spiral_inputs['radius'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+                                                                                       self.spiral_vars['radius'].get(),
+                                                                                       'radius'))
+        self.spiral_inputs['velocity'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+                                                                                         self.spiral_vars[
+                                                                                             'velocity'].get(),
+                                                                                         'velocity'))
+        self.spiral_inputs['omega'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+                                                                                      self.spiral_vars['omega'].get(),
+                                                                                      'omega'))
+        self.spiral_inputs['acceleration'].bind('<Return>',
+                                                lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+                                                                                 self.spiral_vars['acceleration'].get(),
+                                                                                 'acceleration'))
+        self.spiral_inputs['period'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+                                                                                       self.spiral_vars['period'].get(),
+                                                                                       'period'))
+        self.spiral_inputs['frequency'].bind('<Return>',
+                                             lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+                                                                              self.spiral_vars['frequency'].get(),
+                                                                              'frequency'))
+        self.spiral_inputs['x0'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+                                                                                   self.spiral_vars['x0'].get(),
+                                                                                   'x0'))
+        self.spiral_inputs['y0'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+                                                                                   self.spiral_vars['y0'].get(),
+                                                                                   'y0'))
+        self.spiral_inputs['z0'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+                                                                                   self.spiral_vars['z0'].get(),
+                                                                                   'z0'))
+        self.spiral_inputs['phi0'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+                                                                                     self.spiral_vars['phi0'].get(),
+                                                                                     'phi0'))
+        for name in self.spiral_value_names:
+            row_index = next(row_counter)
+            self.spiral_labels[name].grid(row=row_index, column=0)
+            self.spiral_inputs[name].grid(row=row_index, column=1)
+
+        # PLANE
         self.plane_label = Label(self.option_window, text="Plane", font=("Helvetica", 12), width=20)
         self.plane_prescript = Label(self.option_window, text="y = ax + bz + c\na = tan(alpha), b = tan(beta)")
         self.plane_label.grid(row=next(row_counter), column=0, columnspan=2)
-        self.plane_prescript.grid(row=next(row_counter), column=0)
+        self.plane_prescript.grid(row=next(row_counter), column=0, columnspan=2)
 
         a_row = next(row_counter)
         b_row = next(row_counter)
@@ -153,17 +231,25 @@ class UserInterfaceHandler:
         self.plane_beta = DoubleVar()
 
         self.plane_a_input = Entry(self.option_window, textvariable=self.plane_a)
-        self.plane_a_input.bind('<Return>', lambda event: self.plane_change(event, self.vis.plotter.plane, self.plane_a.get(), 'a'))
+        self.plane_a_input.bind('<Return>',
+                                lambda event: self.plane_change(event, self.vis.plotter.plane, self.plane_a.get(), 'a'))
         self.plane_b_input = Entry(self.option_window, textvariable=self.plane_b)
-        self.plane_b_input.bind('<Return>', lambda event: self.plane_change(event, self.vis.plotter.plane, self.plane_b.get(), 'b'))
+        self.plane_b_input.bind('<Return>',
+                                lambda event: self.plane_change(event, self.vis.plotter.plane, self.plane_b.get(), 'b'))
         self.plane_c_input = Entry(self.option_window, textvariable=self.plane_c)
-        self.plane_c_input.bind('<Return>', lambda event: self.plane_change(event, self.vis.plotter.plane, self.plane_c.get(), 'c'))
+        self.plane_c_input.bind('<Return>',
+                                lambda event: self.plane_change(event, self.vis.plotter.plane, self.plane_c.get(), 'c'))
 
-        self.plane_alpha_input = Scale(self.option_window, variable=self.plane_alpha, tickinterval=0.01, from_=-80, to=80, orient=HORIZONTAL, length=120)
-        self.plane_alpha_input.bind('<B1-Motion>', lambda event: self.plane_change(event, self.vis.plotter.plane, self.plane_alpha.get(), 'alpha'))
+        self.plane_alpha_input = Scale(self.option_window, variable=self.plane_alpha, tickinterval=0.01, from_=-80,
+                                       to=80, orient=HORIZONTAL, length=120)
+        self.plane_alpha_input.bind('<B1-Motion>', lambda event: self.plane_change(event, self.vis.plotter.plane,
+                                                                                   self.plane_alpha.get(), 'alpha'))
 
-        self.plane_beta_input = Scale(self.option_window, variable=self.plane_beta, tickinterval=0.01, from_=-80, to=80, orient=HORIZONTAL, length=120)
-        self.plane_beta_input.bind('<B1-Motion>', lambda event: self.plane_change(event, self.vis.plotter.plane, self.plane_beta.get(), 'beta'))
+        self.plane_beta_input = Scale(self.option_window, variable=self.plane_beta, tickinterval=0.01, from_=-80, to=80,
+                                      orient=HORIZONTAL, length=120)
+        self.plane_beta_input.bind('<B1-Motion>',
+                                   lambda event: self.plane_change(event, self.vis.plotter.plane, self.plane_beta.get(),
+                                                                   'beta'))
 
         self.plane_a_label.grid(row=a_row, column=0)
         self.plane_b_label.grid(row=b_row, column=0)
@@ -179,8 +265,62 @@ class UserInterfaceHandler:
         self.plane_alpha_input.grid(row=alpha_row, column=1)
         self.plane_beta_input.grid(row=beta_row, column=1)
 
-        self.plane_update_btn = Button(self.option_window, text="Update Plane", command=lambda: self.update_plane(self.vis.plotter.plane))
+        self.plane_update_btn = Button(self.option_window, text="Update Plane",
+                                       command=lambda: self.update_plane(self.vis.plotter.plane))
         self.plane_update_btn.grid(row=next(row_counter), column=0)
+
+    def spiral_change(self, event, spiral, value, prop):
+        if prop == 'radius':
+            spiral.radius = value
+        elif prop == 'velocity':
+            spiral.velocity = value
+        elif prop == 'omega':
+            spiral.omega = value
+        elif prop == 'acceleration':
+            spiral.acceleration = value
+        elif prop == 'period':
+            spiral.period = value
+        elif prop == 'frequency':
+            spiral.frequency = value
+        elif prop == 'x0':
+            spiral.x0 = value
+        elif prop == 'y0':
+            spiral.y0 = value
+        elif prop == 'z0':
+            spiral.z0 = value
+        self.update_spiral_inputs(spiral)
+        self.update_spiral(self.vis.plotter.spiral)
+        self.vis.canvas.draw()
+
+    def update_spiral_inputs(self, spiral):
+        self.spiral_vars['radius'].set("{:.2f}".format(spiral.radius))
+        self.spiral_vars['velocity'].set("{:.2f}".format(spiral.velocity))
+        self.spiral_vars['omega'].set("{:.2f}".format(spiral.omega))
+        self.spiral_vars['acceleration'].set("{:.2f}".format(spiral.acceleration))
+        self.spiral_vars['period'].set("{:.2f}".format(spiral.period))
+        self.spiral_vars['frequency'].set("{:.2f}".format(spiral.frequency))
+        self.spiral_vars['x0'].set("{:.2f}".format(spiral.x0))
+        self.spiral_vars['y0'].set("{:.2f}".format(spiral.y0))
+        self.spiral_vars['z0'].set("{:.2f}".format(spiral.z0))
+        self.spiral_vars['phi0'].set("{:.2f}".format(spiral.phi0))
+
+    def update_spiral(self, spiral):
+        plots = self.vis.plotter.plots
+
+        X, Y, Z = spiral.calculate_trajectory()
+        spiral_id = id(spiral)
+        if spiral_id not in plots['xyz'].keys():
+            return
+        plots['xyz'][spiral_id]['main']._verts3d = (X, Z, Y)
+
+        plots['xy'][spiral_id]['main'].set_xdata(X)
+        plots['xy'][spiral_id]['main'].set_ydata(Y)
+
+        plots['zy'][spiral_id]['main'].set_xdata(Z)
+        plots['zy'][spiral_id]['main'].set_ydata(Y)
+
+        plots['xz'][spiral_id]['main'].set_xdata(X)
+        plots['xz'][spiral_id]['main'].set_ydata(Z)
 
     def plane_change(self, event, plane, value, prop):
         angle = False
@@ -213,17 +353,12 @@ class UserInterfaceHandler:
 
     def update_plane(self, plane):
         plots = self.vis.plotter.plots
-
         plane_id = id(plane)
 
-        coords = plane.get_coords(self.vis.plotter.proj._last_calc[0][0],
+        x, y, z = plane.get_coords(self.vis.plotter.proj._last_calc[0][0],
                                    self.vis.plotter.proj._last_calc[0][-1],
                                    self.vis.plotter.proj._last_calc[2][0],
                                    self.vis.plotter.proj._last_calc[2][-1])
-        x = coords[0]
-        y = coords[1]
-        z = coords[2]
-
         for obj in plots['xyz'][plane_id].values():
             obj.remove()
 
@@ -237,7 +372,6 @@ class UserInterfaceHandler:
 
         plots['xz'][plane_id]['main'].set_xdata(x)
         plots['xz'][plane_id]['main'].set_ydata(z)
-        self.vis.canvas.draw()
 
     def projectile_change(self, event, traj, value, prop):
         angle = False

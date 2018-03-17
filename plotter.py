@@ -13,6 +13,7 @@ except ImportError:
     raise ImportError("Visualizer requires module Numpy")
 
 from projectile import *
+from spiral import *
 from plane import Plane
 
 
@@ -30,9 +31,13 @@ class Plotter:
 
         self.plane = Plane(alpha=-np.pi/4, beta=0, c=-10)
 
+        self.spiral = Spiral(20, 5, self.plane, y0=1000)
         self.proj = Projectile(self.plane, vel_x=10, vel_y=8, vel_z=25)
+
         self.plot_projectile(self.proj)
+        self.plot_spiral(self.spiral)
         self.plot_plane(self.plane)
+
 
         self.set_axes_labels()
         self.set_axes_props()
@@ -148,3 +153,19 @@ class Plotter:
     def clear_axes(self):
         for axis in self.axes:
             axis.clear()
+
+    def plot_spiral(self, spiral):
+        X, Y, Z = spiral.calculate_trajectory()
+        spiral_id = id(spiral)
+
+        self.plots['xyz'][spiral_id] = {}
+        self.plots['xyz'][spiral_id]['main'] = self.axes['xyz'].plot(X, Z, Y)[0]
+
+        self.plots['xy'][spiral_id] = {}
+        self.plots['xy'][spiral_id]['main'] = self.axes['xy'].plot(X, Y)[0]
+
+        self.plots['zy'][spiral_id] = {}
+        self.plots['zy'][spiral_id]['main'] = self.axes['zy'].plot(Z, Y)[0]
+
+        self.plots['xz'][spiral_id] = {}
+        self.plots['xz'][spiral_id]['main'] = self.axes['xz'].plot(X, Z)[0]
