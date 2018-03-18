@@ -231,7 +231,7 @@ class Spiral:
     def z(self, t):
         return self._radius * np.sin(self._omega * t + self._phi0) + self._z0
 
-    def calculate_trajectory(self, time_step=1 / 20):
+    def calculate_trajectory(self, time_step=1 / 50):
         t = 0
         y = self._y0
         x_coords = []

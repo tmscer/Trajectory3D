@@ -4,17 +4,12 @@ https://matplotlib.org/users/index.html
 https://matplotlib.org/citing.html
 https://academia.stackexchange.com/questions/5482/how-do-i-reference-the-python-programming-language-in-a-thesis-or-a-paper
 
-//
-https://github.com/eliben/code-for-blog/blob/master/2009/qt_mpl_bars.py
 
 // PYTHON OFFICIAL DOC
 https://docs.python.org/3/
 https://docs.python.org/3/library/tkinter.html
 
-https://inspirated.com/2010/01/06/gui-mathematical-equations-scientific-plotting-gtk-latex-matplotlib
 
 // TKINTER
 http://effbot.org/tkinterbook
-
-// matplotlib rotating in matplotlib
-http://matplotlib.1069221.n5.nabble.com/Axes3D-rotation-not-working-when-embedded-in-backend-td19951.html
+https://stackoverflow.com/questions/3085696/adding-a-scrollbar-to-a-group-of-widgets-in-tkinter

@@ -31,7 +31,7 @@ class Plotter:
 
         self.plane = Plane(alpha=-np.pi/4, beta=0, c=-10)
 
-        self.spiral = Spiral(20, 5, self.plane, y0=1000)
+        self.spiral = Spiral(20, 20, self.plane, y0=50)
         self.proj = Projectile(self.plane, vel_x=10, vel_y=8, vel_z=25)
 
         self.plot_projectile(self.proj)
@@ -96,37 +96,37 @@ class Plotter:
         self.plots['xyz'][traj_id] = {}
 
         self.plots['xyz'][traj_id]['main'] = self.axes['xyz'].plot(X, Z, Y)[0]
-        self.plots['xyz'][traj_id]['A'] = self.axes['xyz'].plot([X[0]], [Z[0]], [Y[0]], 'wo')[0]  # A
-        self.plots['xyz'][traj_id]['B'] = self.axes['xyz'].plot([b_pos[0]], [b_pos[2]], [b_pos[1]], 'wo')[0]  # B
-        self.plots['xyz'][traj_id]['C'] = self.axes['xyz'].plot([c_pos[0]], [c_pos[2]], [c_pos[1]], 'wo')[0]  # C
-        self.plots['xyz'][traj_id]['D'] = self.axes['xyz'].plot([X[-1]], [Z[-1]], [Y[-1]], 'w*')[0]  # D
-        self.plots['xyz'][traj_id]['A0'] = self.axes['xyz'].plot([X[0], X[0]], [Z[0], Z[0]], [0, Y[0]], 'w:')[0]  # dotted to A
+        self.plots['xyz'][traj_id]['A'] = self.axes['xyz'].plot([X[0]], [Z[0]], [Y[0]], 'ko')[0]  # A
+        self.plots['xyz'][traj_id]['B'] = self.axes['xyz'].plot([b_pos[0]], [b_pos[2]], [b_pos[1]], 'ko')[0]  # B
+        self.plots['xyz'][traj_id]['C'] = self.axes['xyz'].plot([c_pos[0]], [c_pos[2]], [c_pos[1]], 'ko')[0]  # C
+        self.plots['xyz'][traj_id]['D'] = self.axes['xyz'].plot([X[-1]], [Z[-1]], [Y[-1]], 'k*')[0]  # D
+        self.plots['xyz'][traj_id]['A0'] = self.axes['xyz'].plot([X[0], X[0]], [Z[0], Z[0]], [0, Y[0]], 'k:')[0]  # dotted to A
 
         self.plots['xy'][traj_id] = {}
 
         self.plots['xy'][traj_id]['main'] = self.axes['xy'].plot(X, Y)[0]
-        self.plots['xy'][traj_id]['A'] = self.axes['xy'].plot([X[0]], [Y[0]], 'wo')[0]  # A
-        self.plots['xy'][traj_id]['B'] = self.axes['xy'].plot([b_pos[0]], [b_pos[1]], 'wo')[0]  # B
-        self.plots['xy'][traj_id]['C'] = self.axes['xy'].plot([c_pos[0]], [c_pos[1]], 'wo')[0]  # C
-        self.plots['xy'][traj_id]['D'] = self.axes['xy'].plot([X[-1]], [Y[-1]], 'w*')[0]  # D
-        self.plots['xy'][traj_id]['A0'] = self.axes['xy'].plot([X[0], X[0]], [0, Y[0]], 'w:')[0]  # dotted to A
+        self.plots['xy'][traj_id]['A'] = self.axes['xy'].plot([X[0]], [Y[0]], 'ko')[0]  # A
+        self.plots['xy'][traj_id]['B'] = self.axes['xy'].plot([b_pos[0]], [b_pos[1]], 'ko')[0]  # B
+        self.plots['xy'][traj_id]['C'] = self.axes['xy'].plot([c_pos[0]], [c_pos[1]], 'ko')[0]  # C
+        self.plots['xy'][traj_id]['D'] = self.axes['xy'].plot([X[-1]], [Y[-1]], 'k*')[0]  # D
+        self.plots['xy'][traj_id]['A0'] = self.axes['xy'].plot([X[0], X[0]], [0, Y[0]], 'k:')[0]  # dotted to A
 
         self.plots['zy'][traj_id] = {}
 
         self.plots['zy'][traj_id]['main'] = self.axes['zy'].plot(Z, Y)[0]
-        self.plots['zy'][traj_id]['A'] = self.axes['zy'].plot([Z[0]], [Y[0]], 'wo')[0]  # A
-        self.plots['zy'][traj_id]['B'] = self.axes['zy'].plot([b_pos[2]], [b_pos[1]], 'wo')[0]  # B
-        self.plots['zy'][traj_id]['C'] = self.axes['zy'].plot([c_pos[2]], [c_pos[1]], 'wo')[0]  # C
-        self.plots['zy'][traj_id]['D'] = self.axes['zy'].plot([Z[-1]], [Y[-1]], 'w*')[0]  # D
-        self.plots['zy'][traj_id]['A0'] = self.axes['zy'].plot([Z[0], Z[0]], [0, Y[0]], 'w:')[0]  # dotted to A
+        self.plots['zy'][traj_id]['A'] = self.axes['zy'].plot([Z[0]], [Y[0]], 'ko')[0]  # A
+        self.plots['zy'][traj_id]['B'] = self.axes['zy'].plot([b_pos[2]], [b_pos[1]], 'ko')[0]  # B
+        self.plots['zy'][traj_id]['C'] = self.axes['zy'].plot([c_pos[2]], [c_pos[1]], 'ko')[0]  # C
+        self.plots['zy'][traj_id]['D'] = self.axes['zy'].plot([Z[-1]], [Y[-1]], 'k*')[0]  # D
+        self.plots['zy'][traj_id]['A0'] = self.axes['zy'].plot([Z[0], Z[0]], [0, Y[0]], 'k:')[0]  # dotted to A
 
         self.plots['xz'][traj_id] = {}
 
         self.plots['xz'][traj_id]['main'] = self.axes['xz'].plot(X, Z)[0]
-        self.plots['xz'][traj_id]['A'] = self.axes['xz'].plot([X[0]], [Z[0]], 'wo')[0]  # A
-        self.plots['xz'][traj_id]['B'] = self.axes['xz'].plot([b_pos[0]], [b_pos[2]], 'wo')[0]  # B
-        self.plots['xz'][traj_id]['C'] = self.axes['xz'].plot([c_pos[0]], [c_pos[2]], 'wo')[0]  # C
-        self.plots['xz'][traj_id]['D'] = self.axes['xz'].plot([X[-1]], [Z[-1]], 'w*')[0]  # D
+        self.plots['xz'][traj_id]['A'] = self.axes['xz'].plot([X[0]], [Z[0]], 'ko')[0]  # A
+        self.plots['xz'][traj_id]['B'] = self.axes['xz'].plot([b_pos[0]], [b_pos[2]], 'ko')[0]  # B
+        self.plots['xz'][traj_id]['C'] = self.axes['xz'].plot([c_pos[0]], [c_pos[2]], 'ko')[0]  # C
+        self.plots['xz'][traj_id]['D'] = self.axes['xz'].plot([X[-1]], [Z[-1]], 'k*')[0]  # D
 
     def plot_plane(self, plane):
         coords = plane.get_coords(self.proj._last_calc[0][0], self.proj._last_calc[0][-1], self.proj._last_calc[2][0], self.proj._last_calc[2][-1])
