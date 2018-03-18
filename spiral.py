@@ -208,19 +208,41 @@ class Spiral:
     def plane(self, value):
         self._plane = value
 
+    def intersection_proximity(self, t):
+        return self._plane.y_xz(self.x(t), self.z(t)) - self.y(t)
+
+    def find_plane_intersection(self):
+        t_approx = math.sqrt(2 * self._g * (self._y0 - self._plane.y_xz(self._x0, self._z0))) / self._g
+        y_deviation = self.intersection_proximity(t_approx)
+        while y_deviation > 0.01:
+            if y_deviation > 0:
+                t_approx -= 0.01
+            else:
+                t_approx += 0.01
+            y_deviation = self.intersection_proximity(t_approx)
+        return t_approx
+
+    def x(self, t):
+        return self._radius * np.cos(self._omega * t + self._phi0) + self._x0
+
+    def y(self, t):
+        return self._y0 - 1 / 2 * self._g * t ** 2
+
+    def z(self, t):
+        return self._radius * np.sin(self._omega * t + self._phi0) + self._z0
+
     def calculate_trajectory(self, time_step=1 / 20):
-        xt = lambda t: self._radius * np.cos(self._omega * t + self._phi0) + self._x0
-        zt = lambda t: self._radius * np.sin(self._omega * t + self._phi0) + self._z0
-        yt = lambda t: self._y0 - 1 / 2 * self._g * t ** 2
         t = 0
         y = self._y0
-        xcords = []
-        ycords = []
-        zcords = []
+        x_coords = []
+        y_coords = []
+        z_coords = []
         while y >= 0:
-            y = yt(t)
-            xcords.append(xt(t))
-            ycords.append(y)
-            zcords.append(zt(t))
+            y = self.y(t)
+            x_coords.append(self.x(t))
+            y_coords.append(y)
+            z_coords.append(self.z(t))
             t += time_step
-        return xcords, ycords, zcords
+        print(t)
+        print(self.find_plane_intersection())
+        return x_coords, y_coords, z_coords

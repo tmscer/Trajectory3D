@@ -65,10 +65,11 @@ class Plane:
         self._beta = value
         self._set_using_alpha_beta()
 
+    def y_xz(self, x, z):
+        return self._a * x + self._b * z + self._c
+
     def get_coords(self, x_min=-10, x_max=10, z_min=-10, z_max=10):
         x = [x_min, x_min, x_max, x_max]
         z = [z_min, z_max, z_min, z_max]
-        y = []
-        for i in range(len(x)):
-            y.append(self._a * x[i] + self._b * z[i] + self._c)
+        y = [self.y_xz(x[i], z[i]) for i in range(len(x))]
         return x, y, z

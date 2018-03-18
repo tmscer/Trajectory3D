@@ -23,8 +23,6 @@ class UserInterfaceHandler:
         self.option_window.geometry("300x700+50+50")
         self.option_window.wm_title("Visualizer Toolbar")
 
-        # self.scrollbar = Scrollbar(self.option_window, orient="vertical", command=self.vis.canvas.yview)
-
         row_counter = (x for x in itertools.count(start=0, step=1))
 
         self.coord = StringVar(value="[x , y]")
@@ -169,9 +167,9 @@ class UserInterfaceHandler:
         self.spiral_locked_var_label = Label(self.option_window, text='Locked Variable')
         self.spiral_locked_var_input = OptionMenu(self.option_window, self.spiral_locked_var,
                                                     'radius', 'velocity', 'omega', 'acceleration')
-        unmodif_row = next(row_counter)
-        self.spiral_locked_var_label.grid(row=unmodif_row, column=0)
-        self.spiral_locked_var_input.grid(row=unmodif_row, column=1)
+        locked_var_row = next(row_counter)
+        self.spiral_locked_var_label.grid(row=locked_var_row, column=0)
+        self.spiral_locked_var_input.grid(row=locked_var_row, column=1)
 
         self.spiral_value_names = ['radius', 'velocity', 'omega', 'acceleration', 'period', 'frequency', 'x0', 'y0',
                                    'z0', 'phi0']
