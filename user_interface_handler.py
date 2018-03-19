@@ -18,10 +18,6 @@ class UserInterfaceHandler:
 
     def __init__(self, vis):
         self.vis = vis
-        # build the ui
-        #self.option_window = Toplevel()
-        #self.option_window.geometry("300x700+50+50")
-        #self.option_window.wm_title("Visualizer Toolbar")
 
         self.option_window = Frame(self.vis.tk_root, width=250)
         self.option_window.pack(side=RIGHT, fill=BOTH)
@@ -295,7 +291,7 @@ class UserInterfaceHandler:
         self.plane_beta_input.grid(row=beta_row, column=1)
 
         self.plane_update_btn = Button(self.frame, text="Update Plane",
-                                       command=lambda: self.update_plane(self.vis.plotter.plane))
+                                       command=lambda: self.plane_change(None, self.vis.plotter.plane, None, ''))
         self.plane_update_btn.grid(row=next(row_counter), column=0)
 
     def spiral_change(self, event, spiral, value, prop):
@@ -376,6 +372,7 @@ class UserInterfaceHandler:
             self.plane_b.set("{:.2f}".format(plane.b))
         self.update_plane(plane)
         self.update_traj(self.vis.plotter.proj)
+        self.update_spiral(self.vis.plotter.spiral)
         self.vis.canvas.draw()
 
     def update_plane_inputs(self, plane):
@@ -441,7 +438,7 @@ class UserInterfaceHandler:
         self.proj1_x0.set("{:.2f}".format(traj.x0))
         self.proj1_y0.set("{:.2f}".format(traj.y0))
         self.proj1_z0.set("{:.2f}".format(traj.z0))
-        if not angle:
+        if angle:
             self.proj1_alpha.set(math.degrees(traj.alpha))
             self.proj1_theta.set(math.degrees(traj.theta))
         a_pos = traj.a_pos()
@@ -451,7 +448,8 @@ class UserInterfaceHandler:
         c_pos = traj.c_pos()
         self.proj1_point_c.set("C = [{:.2f} , {:.2f} , {:.2f}]".format(c_pos[0], c_pos[1], c_pos[2]))
         d_pos = traj.d_pos()
-        self.proj1_point_d.set("D = [{:.2f} , {:.2f} , {:.2f}]".format(d_pos[0], d_pos[1], d_pos[2]))
+        if None not in d_pos:
+            self.proj1_point_d.set("D = [{:.2f} , {:.2f} , {:.2f}]".format(d_pos[0], d_pos[1], d_pos[2]))
 
     def display_coords(self, x, y):
         if x < 0:

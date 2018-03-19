@@ -174,9 +174,6 @@ class Projectile:
     def time_at_c(self):
         return 2 * self.time_at_b()
 
-    #def time_at_d(self):
-    #    return (self.vel_y + math.sqrt(self.vel_y ** 2 + 2 * self._g * self.y0)) / self._g
-
     def time_at_d(self):
         pb = self._plane.a * self._vel_x + self._plane.b * self._vel_z - self.vel_y
         dis = pb ** 2 - 2 * self._g * (self._plane.a * self._x0 + self._plane.b + self._plane.c - self._y0)

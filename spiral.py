@@ -214,13 +214,21 @@ class Spiral:
     def find_plane_intersection(self):
         t_approx = math.sqrt(2 * self._g * (self._y0 - self._plane.y_xz(self._x0, self._z0))) / self._g
         y_deviation = self.intersection_proximity(t_approx)
-        while y_deviation > 0.01:
-            if y_deviation > 0:
-                t_approx -= 0.01
-            else:
-                t_approx += 0.01
-            y_deviation = self.intersection_proximity(t_approx)
+        tolerance = 0.1
+        if y_deviation < -tolerance:
+            while y_deviation < -tolerance:
+                t_approx += 0.0001
+                y_deviation = self.intersection_proximity(t_approx)
+        elif y_deviation > tolerance:
+            while y_deviation > tolerance:
+                t_approx -= 0.0001
+                y_deviation = self.intersection_proximity(t_approx)
         return t_approx
+
+    def find_first_plane_intersection(self, t_values):
+        for i in range(len(t_values)):
+            if abs(self.intersection_proximity(t_values[i])) < 0.01:
+                return t_values[:i]
 
     def x(self, t):
         return self._radius * np.cos(self._omega * t + self._phi0) + self._x0
@@ -232,17 +240,10 @@ class Spiral:
         return self._radius * np.sin(self._omega * t + self._phi0) + self._z0
 
     def calculate_trajectory(self, time_step=1 / 50):
-        t = 0
-        y = self._y0
-        x_coords = []
-        y_coords = []
-        z_coords = []
-        while y >= 0:
-            y = self.y(t)
-            x_coords.append(self.x(t))
-            y_coords.append(y)
-            z_coords.append(self.z(t))
-            t += time_step
-        print(t)
-        print(self.find_plane_intersection())
+        t_max = self.find_plane_intersection()
+        t_values = np.append(np.arange(0, t_max, time_step), t_max)
+        #t_values = self.find_first_plane_intersection(t_values)
+        x_coords = self.x(t_values)
+        y_coords = self.y(t_values)
+        z_coords = self.z(t_values)
         return x_coords, y_coords, z_coords
