@@ -12,6 +12,8 @@ except ImportError:
     raise ImportError("Visualizer require module tkinter")
 
 import itertools
+from details_window import *
+from scrollable_side_panel import *
 
 
 class UserInterfaceHandler:
@@ -19,32 +21,38 @@ class UserInterfaceHandler:
     def __init__(self, vis):
         self.vis = vis
 
-        self.option_window = Frame(self.vis.tk_root, width=250)
-        self.option_window.pack(side=RIGHT, fill=BOTH)
+        self.option_panel = Frame(self.vis.tk_root, width=250)
+        self.option_panel.pack(side=RIGHT, fill=BOTH)
 
-        row_counter = (x for x in itertools.count(start=0, step=1))
+        self._row_counter = (x for x in itertools.count(start=0, step=1))
 
-        self.canvas = Canvas(self.option_window, borderwidth=0.5, width=275)
-        self.frame = Frame(self.canvas, width=250)
-        self.vsb = Scrollbar(self.option_window, orient=VERTICAL, command=self.canvas.yview)
-        self.canvas.configure(yscrollcommand=self.vsb.set)
+        self.frame = ScrollableSidePanel(self.option_panel)
 
-        self.vsb.pack(side=RIGHT, fill=BOTH)
-        self.canvas.pack(side=RIGHT, fill=Y, expand=True)
-        self.canvas.create_window((1, 2), window=self.frame, anchor="ne", tags="self.frame")
-        self.canvas.bind_all("<MouseWheel>", lambda event: self.canvas.yview_scroll(int(-(event.delta / 120)), "units"))
-
-        self.frame.bind("<Configure>", lambda *args: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
-
+        # GUI
         self.coord = StringVar(value="[x , y]")
         self.coord_label = Label(self.frame, font=("Helvetica", 15), textvariable=self.coord)
-        self.coord_label.grid(row=next(row_counter), column=0, columnspan=2)
+        self.coord_label.grid(row=self._next_row(), column=0, columnspan=2)
         self.top_spacer = Label(self.frame, text="\t\t\t", width=5)
-        self.top_spacer.grid(row=next(row_counter), column=0)
+        self.top_spacer.grid(row=self._next_row(), column=0)
 
-        # PROJECTILE
+        self._create_parabol_gui()
+        self._create_spiral_gui()
+        self._create_plane_gui()
+
+        low_btn_row = row=self._next_row()
+
+        self.plane_update_btn = Button(self.frame, text="Update Plane",
+                                       command=lambda: self.plane_change(None, self.vis.plotter.plane, None, ''))
+        self.plane_update_btn.grid(row=low_btn_row, column=0)
+
+        self.details_window = None
+        self.toggle_details_btn = Button(self.frame, text="Details",
+                                         command=lambda: self.toggle_details())
+        self.toggle_details_btn.grid(row=low_btn_row, column=1)
+    
+    def _create_parabol_gui(self):
         self.proj1_label = Label(self.frame, font=("Helvetica", 12), text="Trajectory one", width=20)
-        self.proj1_label.grid(row=next(row_counter), column=0, columnspan=2)
+        self.proj1_label.grid(row=self._next_row(), column=0, columnspan=2)
 
         self.proj1_v0 = DoubleVar()
         self.proj1_vx = DoubleVar()
@@ -58,37 +66,44 @@ class UserInterfaceHandler:
 
         self.proj1_v0_input = Entry(self.frame, textvariable=self.proj1_v0)
         self.proj1_v0_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol, self.proj1_v0.get(),
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol,
+                                                                      self.proj1_v0.get(),
                                                                       'v0'))
 
         self.proj1_vx_input = Entry(self.frame, textvariable=self.proj1_vx)
         self.proj1_vx_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol, self.proj1_vx.get(),
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol,
+                                                                      self.proj1_vx.get(),
                                                                       'vx'))
 
         self.proj1_vy_input = Entry(self.frame, textvariable=self.proj1_vy)
         self.proj1_vy_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol, self.proj1_vy.get(),
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol,
+                                                                      self.proj1_vy.get(),
                                                                       'vy'))
 
         self.proj1_vz_input = Entry(self.frame, textvariable=self.proj1_vz)
         self.proj1_vz_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol, self.proj1_vz.get(),
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol,
+                                                                      self.proj1_vz.get(),
                                                                       'vz'))
 
         self.proj1_x0_input = Entry(self.frame, textvariable=self.proj1_x0)
         self.proj1_x0_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol, self.proj1_x0.get(),
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol,
+                                                                      self.proj1_x0.get(),
                                                                       'x0'))
 
         self.proj1_y0_input = Entry(self.frame, textvariable=self.proj1_y0)
         self.proj1_y0_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol, self.proj1_y0.get(),
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol,
+                                                                      self.proj1_y0.get(),
                                                                       'y0'))
 
         self.proj1_z0_input = Entry(self.frame, textvariable=self.proj1_z0)
         self.proj1_z0_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol, self.proj1_z0.get(),
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol,
+                                                                      self.proj1_z0.get(),
                                                                       'z0'))
 
         self.proj1_alpha_input = Scale(self.frame, tickinterval=0.01, from_=0, to=90, orient=HORIZONTAL,
@@ -103,24 +118,24 @@ class UserInterfaceHandler:
                                                                                         self.proj1_theta.get(),
                                                                                         'theta'))
 
-        v0_row = next(row_counter)
-        vx_row = next(row_counter)
-        vy_row = next(row_counter)
-        vz_row = next(row_counter)
+        v0_row = self._next_row()
+        vx_row = self._next_row()
+        vy_row = self._next_row()
+        vz_row = self._next_row()
         self.proj1_v0_input.grid(row=v0_row, column=1)
         self.proj1_vx_input.grid(row=vx_row, column=1)
         self.proj1_vy_input.grid(row=vy_row, column=1)
         self.proj1_vz_input.grid(row=vz_row, column=1)
 
-        x0_row = next(row_counter)
-        y0_row = next(row_counter)
-        z0_row = next(row_counter)
+        x0_row = self._next_row()
+        y0_row = self._next_row()
+        z0_row = self._next_row()
         self.proj1_x0_input.grid(row=x0_row, column=1)
         self.proj1_y0_input.grid(row=y0_row, column=1)
         self.proj1_z0_input.grid(row=z0_row, column=1)
 
-        alpha_row = next(row_counter)
-        theta_row = next(row_counter)
+        alpha_row = next(self._row_counter)
+        theta_row = self._next_row()
         self.proj1_alpha_input.grid(row=alpha_row, column=1)
         self.proj1_theta_input.grid(row=theta_row, column=1)
 
@@ -155,17 +170,17 @@ class UserInterfaceHandler:
         self.proj1_point_d = StringVar()
         self.proj1_point_d_label = Label(self.frame, textvariable=self.proj1_point_d)
 
-        self.proj1_point_a_label.grid(row=next(row_counter), column=0, columnspan=2)
-        self.proj1_point_b_label.grid(row=next(row_counter), column=0, columnspan=2)
-        self.proj1_point_c_label.grid(row=next(row_counter), column=0, columnspan=2)
-        self.proj1_point_d_label.grid(row=next(row_counter), column=0, columnspan=2)
+        self.proj1_point_a_label.grid(row=self._next_row(), column=0, columnspan=2)
+        self.proj1_point_b_label.grid(row=self._next_row(), column=0, columnspan=2)
+        self.proj1_point_c_label.grid(row=self._next_row(), column=0, columnspan=2)
+        self.proj1_point_d_label.grid(row=self._next_row(), column=0, columnspan=2)
 
-        # SPIRAL
+    def _create_spiral_gui(self):
         self.spiral_label = Label(self.frame, text="Spiral", font=("Helvetica", 12), width=20)
         self.spiral_prescript = Label(self.frame,
                                       text="x(t) = r * cos (omega * t) + x0\ny(t) = y0 - 0.5 * g * t ** 2\nz(t) = r * sin(omega * t) + z0")
-        self.spiral_label.grid(row=next(row_counter), column=0, columnspan=2)
-        self.spiral_prescript.grid(row=next(row_counter), column=0, columnspan=2)
+        self.spiral_label.grid(row=self._next_row(), column=0, columnspan=2)
+        self.spiral_prescript.grid(row=self._next_row(), column=0, columnspan=2)
 
         self.spiral_locked_var = StringVar(self.frame)
         self.spiral_locked_var.set('radius')  # default value
@@ -177,8 +192,8 @@ class UserInterfaceHandler:
 
         self.spiral_locked_var_label = Label(self.frame, text='Locked Variable')
         self.spiral_locked_var_input = OptionMenu(self.frame, self.spiral_locked_var,
-                                                    'radius', 'velocity', 'omega', 'acceleration')
-        locked_var_row = next(row_counter)
+                                                  'radius', 'velocity', 'omega', 'acceleration')
+        locked_var_row = self._next_row()
         self.spiral_locked_var_label.grid(row=locked_var_row, column=0)
         self.spiral_locked_var_input.grid(row=locked_var_row, column=1)
 
@@ -226,25 +241,25 @@ class UserInterfaceHandler:
                                                                                      'phi0'))
 
         for name in self.spiral_value_names:
-            row_index = next(row_counter)
+            row_index = self._next_row()
             self.spiral_labels[name].grid(row=row_index, column=0)
             self.spiral_inputs[name].grid(row=row_index, column=1)
 
-        # PLANE
+    def _create_plane_gui(self):
         self.plane_label = Label(self.frame, text="Plane", font=("Helvetica", 12), width=20)
         self.plane_prescript = Label(self.frame, text="y = ax + bz + c\na = tan(alpha), b = tan(beta)")
-        self.plane_label.grid(row=next(row_counter), column=0, columnspan=2)
-        self.plane_prescript.grid(row=next(row_counter), column=0, columnspan=2)
+        self.plane_label.grid(row=self._next_row(), column=0, columnspan=2)
+        self.plane_prescript.grid(row=self._next_row(), column=0, columnspan=2)
 
-        a_row = next(row_counter)
-        b_row = next(row_counter)
-        c_row = next(row_counter)
+        a_row = self._next_row()
+        b_row = self._next_row()
+        c_row = self._next_row()
         self.plane_a_label = Label(self.frame, text="a:")
         self.plane_b_label = Label(self.frame, text="b:")
         self.plane_c_label = Label(self.frame, text="c:")
 
-        alpha_row = next(row_counter)
-        beta_row = next(row_counter)
+        alpha_row = self._next_row()
+        beta_row = self._next_row()
         self.plane_alpha_label = Label(self.frame, text="alpha")
         self.plane_beta_label = Label(self.frame, text="beta")
 
@@ -290,9 +305,10 @@ class UserInterfaceHandler:
         self.plane_alpha_input.grid(row=alpha_row, column=1)
         self.plane_beta_input.grid(row=beta_row, column=1)
 
-        self.plane_update_btn = Button(self.frame, text="Update Plane",
-                                       command=lambda: self.plane_change(None, self.vis.plotter.plane, None, ''))
-        self.plane_update_btn.grid(row=next(row_counter), column=0)
+    def toggle_details(self):
+        if self.details_window is None:
+            self.details_window = DetailsWindow(self.vis.tk_root)
+        self.details_window.toggle()
 
     def spiral_change(self, event, spiral, value, prop):
         if prop == 'radius':
@@ -422,3 +438,6 @@ class UserInterfaceHandler:
             pol_y = '+'
         self.coord.set("[{}{:2.3f} , {}{:2.3f}]".format(pol_x, abs(x), pol_y, abs(y)))
         return ''
+    
+    def _next_row(self):
+        return next(self._row_counter)
