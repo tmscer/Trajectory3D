@@ -49,7 +49,7 @@ class Visualizer:
 
         self.plotter = Plotter(self)
 
-        self.ui_handler.update_projectile_inputs(self.plotter.proj, True)
+        self.ui_handler.update_projectile_inputs(self.plotter.parabol, True)
         self.ui_handler.update_plane_inputs(self.plotter.plane)
         self.ui_handler.update_spiral_inputs(self.plotter.spiral)
 

@@ -24,7 +24,7 @@ class UserInterfaceHandler:
 
         row_counter = (x for x in itertools.count(start=0, step=1))
 
-        self.canvas = Canvas(self.option_window, borderwidth=0.5, width=250)
+        self.canvas = Canvas(self.option_window, borderwidth=0.5, width=275)
         self.frame = Frame(self.canvas, width=250)
         self.vsb = Scrollbar(self.option_window, orient=VERTICAL, command=self.canvas.yview)
         self.canvas.configure(yscrollcommand=self.vsb.set)
@@ -58,48 +58,48 @@ class UserInterfaceHandler:
 
         self.proj1_v0_input = Entry(self.frame, textvariable=self.proj1_v0)
         self.proj1_v0_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_v0.get(),
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol, self.proj1_v0.get(),
                                                                       'v0'))
 
         self.proj1_vx_input = Entry(self.frame, textvariable=self.proj1_vx)
         self.proj1_vx_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_vx.get(),
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol, self.proj1_vx.get(),
                                                                       'vx'))
 
         self.proj1_vy_input = Entry(self.frame, textvariable=self.proj1_vy)
         self.proj1_vy_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_vy.get(),
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol, self.proj1_vy.get(),
                                                                       'vy'))
 
         self.proj1_vz_input = Entry(self.frame, textvariable=self.proj1_vz)
         self.proj1_vz_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_vz.get(),
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol, self.proj1_vz.get(),
                                                                       'vz'))
 
         self.proj1_x0_input = Entry(self.frame, textvariable=self.proj1_x0)
         self.proj1_x0_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_x0.get(),
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol, self.proj1_x0.get(),
                                                                       'x0'))
 
         self.proj1_y0_input = Entry(self.frame, textvariable=self.proj1_y0)
         self.proj1_y0_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_y0.get(),
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol, self.proj1_y0.get(),
                                                                       'y0'))
 
         self.proj1_z0_input = Entry(self.frame, textvariable=self.proj1_z0)
         self.proj1_z0_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.proj, self.proj1_z0.get(),
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol, self.proj1_z0.get(),
                                                                       'z0'))
 
         self.proj1_alpha_input = Scale(self.frame, tickinterval=0.01, from_=0, to=90, orient=HORIZONTAL,
                                        variable=self.proj1_alpha, length=120)
-        self.proj1_alpha_input.bind('<B1-Motion>', lambda event: self.projectile_change(event, self.vis.plotter.proj,
+        self.proj1_alpha_input.bind('<B1-Motion>', lambda event: self.projectile_change(event, self.vis.plotter.parabol,
                                                                                         self.proj1_alpha.get(),
                                                                                         'alpha'))
 
         self.proj1_theta_input = Scale(self.frame, tickinterval=0.01, from_=0, to=360, orient=HORIZONTAL,
                                        variable=self.proj1_theta, length=120)
-        self.proj1_theta_input.bind('<B1-Motion>', lambda event: self.projectile_change(event, self.vis.plotter.proj,
+        self.proj1_theta_input.bind('<B1-Motion>', lambda event: self.projectile_change(event, self.vis.plotter.parabol,
                                                                                         self.proj1_theta.get(),
                                                                                         'theta'))
 
@@ -316,7 +316,7 @@ class UserInterfaceHandler:
         elif prop == 'phi0':
             spiral.phi0 = value
         self.update_spiral_inputs(spiral)
-        self.update_spiral(self.vis.plotter.spiral)
+        self.vis.plotter.update_spiral()
         self.vis.canvas.draw()
 
     def update_spiral_inputs(self, spiral):
@@ -330,24 +330,6 @@ class UserInterfaceHandler:
         self.spiral_vars['y0'].set("{:.2f}".format(spiral.y0))
         self.spiral_vars['z0'].set("{:.2f}".format(spiral.z0))
         self.spiral_vars['phi0'].set("{:.2f}".format(spiral.phi0))
-
-    def update_spiral(self, spiral):
-        plots = self.vis.plotter.plots
-
-        X, Y, Z = spiral.calculate_trajectory()
-        spiral_id = id(spiral)
-        if spiral_id not in plots['xyz'].keys():
-            return
-        plots['xyz'][spiral_id]['main']._verts3d = (X, Z, Y)
-
-        plots['xy'][spiral_id]['main'].set_xdata(X)
-        plots['xy'][spiral_id]['main'].set_ydata(Y)
-
-        plots['zy'][spiral_id]['main'].set_xdata(Z)
-        plots['zy'][spiral_id]['main'].set_ydata(Y)
-
-        plots['xz'][spiral_id]['main'].set_xdata(X)
-        plots['xz'][spiral_id]['main'].set_ydata(Z)
 
     def plane_change(self, event, plane, value, prop):
         angle = False
@@ -370,9 +352,9 @@ class UserInterfaceHandler:
             plane.beta = math.radians(value)
             self.plane_beta.set("{:.2f}".format(math.degrees(plane.beta)))
             self.plane_b.set("{:.2f}".format(plane.b))
-        self.update_plane(plane)
-        self.update_traj(self.vis.plotter.proj)
-        self.update_spiral(self.vis.plotter.spiral)
+        self.vis.plotter.update_plane(plane)
+        self.vis.plotter.update_traj()
+        self.vis.plotter.update_spiral()
         self.vis.canvas.draw()
 
     def update_plane_inputs(self, plane):
@@ -381,28 +363,6 @@ class UserInterfaceHandler:
         self.plane_c.set("{:.2f}".format(plane.c))
         self.plane_alpha.set("{:.2f}".format(math.degrees(plane.alpha)))
         self.plane_beta.set("{:.2f}".format(math.degrees(plane.beta)))
-
-    def update_plane(self, plane):
-        plots = self.vis.plotter.plots
-        plane_id = id(plane)
-
-        x, y, z = plane.get_coords(self.vis.plotter.proj._last_calc[0][0],
-                                   self.vis.plotter.proj._last_calc[0][-1],
-                                   self.vis.plotter.proj._last_calc[2][0],
-                                   self.vis.plotter.proj._last_calc[2][-1])
-        for obj in plots['xyz'][plane_id].values():
-            obj.remove()
-
-        self.vis.plotter.plot_plane_3d(plane_id, x, y, z)
-
-        plots['xy'][plane_id]['main'].set_xdata(x)
-        plots['xy'][plane_id]['main'].set_ydata(y)
-
-        plots['zy'][plane_id]['main'].set_xdata(z)
-        plots['zy'][plane_id]['main'].set_ydata(y)
-
-        plots['xz'][plane_id]['main'].set_xdata(x)
-        plots['xz'][plane_id]['main'].set_ydata(z)
 
     def projectile_change(self, event, traj, value, prop):
         angle = False
@@ -427,7 +387,7 @@ class UserInterfaceHandler:
             angle = True
             traj.theta = math.radians(value)
         self.update_projectile_inputs(traj, angle)
-        self.update_traj(self.vis.plotter.proj)
+        self.vis.plotter.update_traj()
         self.vis.canvas.draw()
 
     def update_projectile_inputs(self, traj, angle):
@@ -462,60 +422,3 @@ class UserInterfaceHandler:
             pol_y = '+'
         self.coord.set("[{}{:2.3f} , {}{:2.3f}]".format(pol_x, abs(x), pol_y, abs(y)))
         return ''
-
-    def update_traj(self, traj):
-        plots = self.vis.plotter.plots
-
-        xyz = traj.calculate_trajectory()
-        X = xyz[0]
-        Y = xyz[1]
-        Z = xyz[2]
-        b_pos = traj.b_pos()
-        c_pos = traj.c_pos()
-
-        traj_id = id(traj)
-        if traj_id not in plots['xyz'].keys():
-            return
-        plots['xyz'][traj_id]['main']._verts3d = (X, Z, Y)
-        plots['xyz'][traj_id]['A']._verts3d = ([X[0]], [Z[0]], [Y[0]])
-        plots['xyz'][traj_id]['B']._verts3d = ([b_pos[0]], [b_pos[2]], [b_pos[1]])
-        plots['xyz'][traj_id]['C']._verts3d = ([c_pos[0]], [c_pos[2]], [c_pos[1]])
-        plots['xyz'][traj_id]['D']._verts3d = ([X[-1]], [Z[-1]], [Y[-1]])
-        plots['xyz'][traj_id]['A0']._verts3d = ([X[0], X[0]], [Z[0], Z[0]], [0, Y[0]])
-
-        plots['xy'][traj_id]['main'].set_xdata(X)
-        plots['xy'][traj_id]['main'].set_ydata(Y)
-        plots['xy'][traj_id]['A'].set_xdata([X[0]])
-        plots['xy'][traj_id]['A'].set_ydata([Y[0]])
-        plots['xy'][traj_id]['B'].set_xdata([b_pos[0]])
-        plots['xy'][traj_id]['B'].set_ydata([b_pos[1]])
-        plots['xy'][traj_id]['C'].set_xdata([c_pos[0]])
-        plots['xy'][traj_id]['C'].set_ydata([c_pos[1]])
-        plots['xy'][traj_id]['D'].set_xdata([X[-1]])
-        plots['xy'][traj_id]['D'].set_ydata([Y[-1]])
-        plots['xy'][traj_id]['A0'].set_xdata([X[0], X[0]])
-        plots['xy'][traj_id]['A0'].set_ydata([0, Y[0]])
-
-        plots['zy'][traj_id]['main'].set_xdata(Z)
-        plots['zy'][traj_id]['main'].set_ydata(Y)
-        plots['zy'][traj_id]['A'].set_xdata([Z[0]])
-        plots['zy'][traj_id]['A'].set_ydata([Y[0]])
-        plots['zy'][traj_id]['B'].set_xdata([b_pos[2]])
-        plots['zy'][traj_id]['B'].set_ydata([b_pos[1]])
-        plots['zy'][traj_id]['C'].set_xdata([c_pos[2]])
-        plots['zy'][traj_id]['C'].set_ydata([c_pos[1]])
-        plots['zy'][traj_id]['D'].set_xdata([Z[-1]])
-        plots['zy'][traj_id]['D'].set_ydata([Y[-1]])
-        plots['zy'][traj_id]['A0'].set_xdata([Z[0], Z[0]])
-        plots['zy'][traj_id]['A0'].set_ydata([0, Y[0]])
-
-        plots['xz'][traj_id]['main'].set_xdata(X)
-        plots['xz'][traj_id]['main'].set_ydata(Z)
-        plots['xz'][traj_id]['A'].set_xdata([X[0]])
-        plots['xz'][traj_id]['A'].set_ydata([Z[0]])
-        plots['xz'][traj_id]['B'].set_xdata([b_pos[0]])
-        plots['xz'][traj_id]['B'].set_ydata([b_pos[2]])
-        plots['xz'][traj_id]['C'].set_xdata([c_pos[0]])
-        plots['xz'][traj_id]['C'].set_ydata([c_pos[2]])
-        plots['xz'][traj_id]['D'].set_xdata([X[-1]])
-        plots['xz'][traj_id]['D'].set_ydata([Z[-1]])

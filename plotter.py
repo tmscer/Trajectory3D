@@ -32,9 +32,9 @@ class Plotter:
         self.plane = Plane(alpha=-np.pi/4, beta=0, c=-10)
 
         self.spiral = Spiral(20, 20, self.plane, y0=50)
-        self.proj = Projectile(self.plane, vel_x=10, vel_y=8, vel_z=25)
+        self.parabol = Projectile(self.plane, vel_x=10, vel_y=8, vel_z=25)
 
-        self.plot_projectile(self.proj)
+        self.plot_projectile(self.parabol)
         self.plot_spiral(self.spiral)
         self.plot_plane(self.plane)
 
@@ -128,8 +128,65 @@ class Plotter:
         self.plots['xz'][traj_id]['C'] = self.axes['xz'].plot([c_pos[0]], [c_pos[2]], 'ko')[0]  # C
         self.plots['xz'][traj_id]['D'] = self.axes['xz'].plot([X[-1]], [Z[-1]], 'k*')[0]  # D
 
+    def update_traj(self):
+        xyz = self.parabol.calculate_trajectory()
+        X = xyz[0]
+        Y = xyz[1]
+        Z = xyz[2]
+        b_pos = self.parabol.b_pos()
+        c_pos = self.parabol.c_pos()
+
+        parabol_id = id(self.parabol)
+
+        if parabol_id not in self.plots['xyz'].keys():
+            return
+
+        self.plots['xyz'][parabol_id]['main']._verts3d = (X, Z, Y)
+        self.plots['xyz'][parabol_id]['A']._verts3d = ([X[0]], [Z[0]], [Y[0]])
+        self.plots['xyz'][parabol_id]['B']._verts3d = ([b_pos[0]], [b_pos[2]], [b_pos[1]])
+        self.plots['xyz'][parabol_id]['C']._verts3d = ([c_pos[0]], [c_pos[2]], [c_pos[1]])
+        self.plots['xyz'][parabol_id]['D']._verts3d = ([X[-1]], [Z[-1]], [Y[-1]])
+        self.plots['xyz'][parabol_id]['A0']._verts3d = ([X[0], X[0]], [Z[0], Z[0]], [0, Y[0]])
+
+        self.plots['xy'][parabol_id]['main'].set_xdata(X)
+        self.plots['xy'][parabol_id]['main'].set_ydata(Y)
+        self.plots['xy'][parabol_id]['A'].set_xdata([X[0]])
+        self.plots['xy'][parabol_id]['A'].set_ydata([Y[0]])
+        self.plots['xy'][parabol_id]['B'].set_xdata([b_pos[0]])
+        self.plots['xy'][parabol_id]['B'].set_ydata([b_pos[1]])
+        self.plots['xy'][parabol_id]['C'].set_xdata([c_pos[0]])
+        self.plots['xy'][parabol_id]['C'].set_ydata([c_pos[1]])
+        self.plots['xy'][parabol_id]['D'].set_xdata([X[-1]])
+        self.plots['xy'][parabol_id]['D'].set_ydata([Y[-1]])
+        self.plots['xy'][parabol_id]['A0'].set_xdata([X[0], X[0]])
+        self.plots['xy'][parabol_id]['A0'].set_ydata([0, Y[0]])
+
+        self.plots['zy'][parabol_id]['main'].set_xdata(Z)
+        self.plots['zy'][parabol_id]['main'].set_ydata(Y)
+        self.plots['zy'][parabol_id]['A'].set_xdata([Z[0]])
+        self.plots['zy'][parabol_id]['A'].set_ydata([Y[0]])
+        self.plots['zy'][parabol_id]['B'].set_xdata([b_pos[2]])
+        self.plots['zy'][parabol_id]['B'].set_ydata([b_pos[1]])
+        self.plots['zy'][parabol_id]['C'].set_xdata([c_pos[2]])
+        self.plots['zy'][parabol_id]['C'].set_ydata([c_pos[1]])
+        self.plots['zy'][parabol_id]['D'].set_xdata([Z[-1]])
+        self.plots['zy'][parabol_id]['D'].set_ydata([Y[-1]])
+        self.plots['zy'][parabol_id]['A0'].set_xdata([Z[0], Z[0]])
+        self.plots['zy'][parabol_id]['A0'].set_ydata([0, Y[0]])
+
+        self.plots['xz'][parabol_id]['main'].set_xdata(X)
+        self.plots['xz'][parabol_id]['main'].set_ydata(Z)
+        self.plots['xz'][parabol_id]['A'].set_xdata([X[0]])
+        self.plots['xz'][parabol_id]['A'].set_ydata([Z[0]])
+        self.plots['xz'][parabol_id]['B'].set_xdata([b_pos[0]])
+        self.plots['xz'][parabol_id]['B'].set_ydata([b_pos[2]])
+        self.plots['xz'][parabol_id]['C'].set_xdata([c_pos[0]])
+        self.plots['xz'][parabol_id]['C'].set_ydata([c_pos[2]])
+        self.plots['xz'][parabol_id]['D'].set_xdata([X[-1]])
+        self.plots['xz'][parabol_id]['D'].set_ydata([Z[-1]])
+
     def plot_plane(self, plane):
-        coords = plane.get_coords(self.proj._last_calc[0][0], self.proj._last_calc[0][-1], self.proj._last_calc[2][0], self.proj._last_calc[2][-1])
+        coords = plane.get_coords(self.parabol._last_calc[0][0], self.parabol._last_calc[0][-1], self.parabol._last_calc[2][0], self.parabol._last_calc[2][-1])
         x = coords[0]
         y = coords[1]
         z = coords[2]
@@ -150,6 +207,27 @@ class Plotter:
         self.plots['xyz'][plane_id] = {}
         self.plots['xyz'][plane_id]['main'] = self.axes['xyz'].plot_trisurf(x, z, y, color=(0.5, 0.5, 0.5))
 
+    def update_plane(self, plane):
+        plane_id = id(plane)
+
+        x, y, z = plane.get_coords(self.parabol._last_calc[0][0],
+                                   self.parabol._last_calc[0][-1],
+                                   self.parabol._last_calc[2][0],
+                                   self.parabol._last_calc[2][-1])
+        for obj in self.plots['xyz'][plane_id].values():
+            obj.remove()
+
+        self.vis.plotter.plot_plane_3d(plane_id, x, y, z)
+
+        self.plots['xy'][plane_id]['main'].set_xdata(x)
+        self.plots['xy'][plane_id]['main'].set_ydata(y)
+
+        self.plots['zy'][plane_id]['main'].set_xdata(z)
+        self.plots['zy'][plane_id]['main'].set_ydata(y)
+
+        self.plots['xz'][plane_id]['main'].set_xdata(x)
+        self.plots['xz'][plane_id]['main'].set_ydata(z)
+
     def clear_axes(self):
         for axis in self.axes:
             axis.clear()
@@ -169,3 +247,22 @@ class Plotter:
 
         self.plots['xz'][spiral_id] = {}
         self.plots['xz'][spiral_id]['main'] = self.axes['xz'].plot(X, Z)[0]
+
+    def update_spiral(self):
+        X, Y, Z = self.spiral.calculate_trajectory()
+
+        spiral_id = id(self.spiral)
+
+        if spiral_id not in self.plots['xyz'].keys():
+            return
+
+        self.plots['xyz'][spiral_id]['main']._verts3d = (X, Z, Y)
+
+        self.plots['xy'][spiral_id]['main'].set_xdata(X)
+        self.plots['xy'][spiral_id]['main'].set_ydata(Y)
+
+        self.plots['zy'][spiral_id]['main'].set_xdata(Z)
+        self.plots['zy'][spiral_id]['main'].set_ydata(Y)
+
+        self.plots['xz'][spiral_id]['main'].set_xdata(X)
+        self.plots['xz'][spiral_id]['main'].set_ydata(Z)
