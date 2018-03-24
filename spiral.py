@@ -28,7 +28,6 @@ class Spiral:
     @locked_var.setter
     def locked_var(self, value):
         self._locked_var = value
-        print(self._locked_var)
 
     @property
     def radius(self):
