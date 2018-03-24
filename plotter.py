@@ -8,7 +8,7 @@ except ImportError:
     raise ImportError("Visualizer requires module Matplotlib")
 
 try:
-    import numpy
+    import numpy as np
 except ImportError:
     raise ImportError("Visualizer requires module Numpy")
 
@@ -60,6 +60,11 @@ class Plotter:
             axis.autoscale(True)
             #axis.set_autoscale_on(True)
 
+    def adjust_axes(self):
+        for key in self.axes:
+            self.axes[key].relim()
+            self.axes[key].autoscale_view()
+
     def remove_trajectory(self, traj):
         traj_id = id(traj)
         for plot in self.plots.values():
@@ -85,10 +90,7 @@ class Plotter:
         self.axes['zy'].set_ylabel(y_label, fontsize=10)
 
     def plot_projectile(self, traj):
-        xyz = traj.calculate_trajectory()
-        X = xyz[0]
-        Y = xyz[1]
-        Z = xyz[2]
+        X, Y, Z, _ = traj.calculate_trajectory()
         b_pos = traj.b_pos()
         c_pos = traj.c_pos()
 
@@ -233,7 +235,7 @@ class Plotter:
             axis.clear()
 
     def plot_spiral(self, spiral):
-        X, Y, Z = spiral.calculate_trajectory()
+        X, Y, Z, _ = spiral.calculate_trajectory()
         spiral_id = id(spiral)
 
         self.plots['xyz'][spiral_id] = {}
@@ -249,7 +251,7 @@ class Plotter:
         self.plots['xz'][spiral_id]['main'] = self.axes['xz'].plot(X, Z)[0]
 
     def update_spiral(self):
-        X, Y, Z = self.spiral.calculate_trajectory()
+        X, Y, Z, _ = self.spiral.calculate_trajectory()
 
         spiral_id = id(self.spiral)
 

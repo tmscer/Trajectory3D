@@ -155,8 +155,12 @@ class Parabola:
     def z_pos(self, t):
         return self._z0 + self._vel_z * t
 
+    def vy(self, t):
+        return self._vel_y - self._g * t
+
     def calculate_trajectory(self, time_step=1 / 10):
-        values = [self._vel_x, self._vel_y, self._vel_z, self._x0, self._y0, self._z0, self._plane.a, self._plane.b, self._plane.c]
+        values = [self._vel_x, self._vel_y, self._vel_z, self._x0, self._y0, self._z0, self._plane.a, self._plane.b,
+                  self._plane.c, self._g, time_step]
         if self._last_values == values:
             return self._last_calc
         td = self.time_at_d()
@@ -165,7 +169,7 @@ class Parabola:
         y_values = t_values * (self._vel_y - 0.5 * self._g * t_values) + self._y0
         z_values = t_values * self._vel_z + self._z0
         self._last_values = values
-        self._last_calc = x_values, y_values, z_values
+        self._last_calc = x_values, y_values, z_values, t_values
         return self._last_calc
 
     def time_at_b(self):

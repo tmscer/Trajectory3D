@@ -17,6 +17,7 @@ try:
 except ImportError:
     raise ImportError("Visualizer requires module tkinter")
 
+import app_style
 from parabola import Parabola
 from plotter import Plotter
 from main_window import MainWindow
@@ -25,7 +26,7 @@ from main_window import MainWindow
 class Visualizer:
 
     def __init__(self):
-        pyplot.style.use("default")
+        pyplot.style.use(app_style.plot.style)
         self.tk_root = tkinter.Tk()
 
         self.tk_root.wm_title("Trajectory Vis")
@@ -52,6 +53,7 @@ class Visualizer:
         self.ui_handler.update_projectile_inputs(self.plotter.parabola, True)
         self.ui_handler.update_plane_inputs(self.plotter.plane)
         self.ui_handler.update_spiral_inputs(self.plotter.spiral)
+        self.ui_handler.grav_acceleration_change(None, 9.81)
 
         #pyplot.xlim([-10, 10])
         #pyplot.ylim([-10, 10])

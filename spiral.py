@@ -5,6 +5,8 @@ import math
 class Spiral:
 
     def __init__(self, radius, omega, plane, x0=0, y0=0, z0=0, phi0=0, g=9.81):
+        self._last_values = None
+        self._last_calc = None
         self._period = 2 * np.pi / omega
         self._frequency = 1 / self._period
         self._velocity = omega * radius
@@ -230,6 +232,16 @@ class Spiral:
             if abs(self.intersection_proximity(t_values[i])) < 0.01:
                 return t_values[:i]
 
+    # Derivations
+    def vel_x(self, t):
+        return -1 * self._omega * self._radius * np.sin(self._omega * t + self._phi0)
+
+    def vel_y(self, t):
+        return -1 * self._g * t
+
+    def vel_z(self, t):
+        return self.omega * self._radius * np.cos(self._omega * t + self._phi0)
+
     def x(self, t):
         return self._radius * np.cos(self._omega * t + self._phi0) + self._x0
 
@@ -240,10 +252,15 @@ class Spiral:
         return self._radius * np.sin(self._omega * t + self._phi0) + self._z0
 
     def calculate_trajectory(self, time_step=1 / 50):
+        values = [self._x0, self._y0, self._z0, self._g, self._plane.a, self._plane.b, self._plane.c,
+                  self._phi0, self._omega, self._velocity, self._acceleration]
+        if self._last_values == values:
+            return self._last_calc
         t_max = self.find_plane_intersection()
         t_values = np.append(np.arange(0, t_max, time_step), t_max)
         #t_values = self.find_first_plane_intersection(t_values)
         x_coords = self.x(t_values)
         y_coords = self.y(t_values)
         z_coords = self.z(t_values)
-        return x_coords, y_coords, z_coords
+        self._last_calc = x_coords, y_coords, z_coords, t_values
+        return self._last_calc
