@@ -2,7 +2,7 @@ import math
 import numpy as np
 
 
-class Projectile:
+class Parabola:
 
     def __init__(self, plane, vel_x=None, vel_y=None, vel_z=None, alpha=None, theta=None, v0=None, x0=0, y0=0, z0=0,
                  g=9.81):

@@ -17,9 +17,9 @@ try:
 except ImportError:
     raise ImportError("Visualizer requires module tkinter")
 
-from projectile import *
-from plotter import *
-from user_interface_handler import *
+from parabola import Parabola
+from plotter import Plotter
+from main_window import MainWindow
 
 
 class Visualizer:
@@ -45,11 +45,11 @@ class Visualizer:
         self.plotter = None
 
         # Sets up the ui
-        self.ui_handler = UserInterfaceHandler(self)
+        self.ui_handler = MainWindow(self)
 
         self.plotter = Plotter(self)
 
-        self.ui_handler.update_projectile_inputs(self.plotter.parabol, True)
+        self.ui_handler.update_projectile_inputs(self.plotter.parabola, True)
         self.ui_handler.update_plane_inputs(self.plotter.plane)
         self.ui_handler.update_spiral_inputs(self.plotter.spiral)
 

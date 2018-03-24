@@ -30,3 +30,5 @@ verts = [(0, 0)] + list(zip(qcircle.real, qcircle.imag))
 poly = Polygon(verts, **{'facecolor': 'grey', 'alpha': 0.33})
 
 ax.add_patch(poly)
+
+plt.show()

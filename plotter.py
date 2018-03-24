@@ -12,8 +12,8 @@ try:
 except ImportError:
     raise ImportError("Visualizer requires module Numpy")
 
-from projectile import *
-from spiral import *
+from parabola import Parabola
+from spiral import Spiral
 from plane import Plane
 
 
@@ -32,9 +32,9 @@ class Plotter:
         self.plane = Plane(alpha=-np.pi/4, beta=0, c=-10)
 
         self.spiral = Spiral(20, 20, self.plane, y0=50)
-        self.parabol = Projectile(self.plane, vel_x=10, vel_y=8, vel_z=25)
+        self.parabola = Parabola(self.plane, vel_x=10, vel_y=8, vel_z=25)
 
-        self.plot_projectile(self.parabol)
+        self.plot_projectile(self.parabola)
         self.plot_spiral(self.spiral)
         self.plot_plane(self.plane)
 
@@ -129,14 +129,14 @@ class Plotter:
         self.plots['xz'][traj_id]['D'] = self.axes['xz'].plot([X[-1]], [Z[-1]], 'k*')[0]  # D
 
     def update_traj(self):
-        xyz = self.parabol.calculate_trajectory()
+        xyz = self.parabola.calculate_trajectory()
         X = xyz[0]
         Y = xyz[1]
         Z = xyz[2]
-        b_pos = self.parabol.b_pos()
-        c_pos = self.parabol.c_pos()
+        b_pos = self.parabola.b_pos()
+        c_pos = self.parabola.c_pos()
 
-        parabol_id = id(self.parabol)
+        parabol_id = id(self.parabola)
 
         if parabol_id not in self.plots['xyz'].keys():
             return
@@ -186,7 +186,7 @@ class Plotter:
         self.plots['xz'][parabol_id]['D'].set_ydata([Z[-1]])
 
     def plot_plane(self, plane):
-        coords = plane.get_coords(self.parabol._last_calc[0][0], self.parabol._last_calc[0][-1], self.parabol._last_calc[2][0], self.parabol._last_calc[2][-1])
+        coords = plane.get_coords(self.parabola._last_calc[0][0], self.parabola._last_calc[0][-1], self.parabola._last_calc[2][0], self.parabola._last_calc[2][-1])
         x = coords[0]
         y = coords[1]
         z = coords[2]
@@ -210,10 +210,10 @@ class Plotter:
     def update_plane(self, plane):
         plane_id = id(plane)
 
-        x, y, z = plane.get_coords(self.parabol._last_calc[0][0],
-                                   self.parabol._last_calc[0][-1],
-                                   self.parabol._last_calc[2][0],
-                                   self.parabol._last_calc[2][-1])
+        x, y, z = plane.get_coords(self.parabola._last_calc[0][0],
+                                   self.parabola._last_calc[0][-1],
+                                   self.parabola._last_calc[2][0],
+                                   self.parabola._last_calc[2][-1])
         for obj in self.plots['xyz'][plane_id].values():
             obj.remove()
 

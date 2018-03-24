@@ -1,5 +1,5 @@
-from math import pi
 import math
+import itertools
 
 try:
     from matplotlib import pyplot
@@ -11,12 +11,11 @@ try:
 except ImportError:
     raise ImportError("Visualizer require module tkinter")
 
-import itertools
 from details_window import *
 from scrollable_side_panel import *
 
 
-class UserInterfaceHandler:
+class MainWindow:
 
     def __init__(self, vis):
         self.vis = vis
@@ -35,7 +34,7 @@ class UserInterfaceHandler:
         self.top_spacer = Label(self.frame, text="\t\t\t", width=5)
         self.top_spacer.grid(row=self._next_row(), column=0)
 
-        self._create_parabol_gui()
+        self._create_parabola_gui()
         self._create_spiral_gui()
         self._create_plane_gui()
 
@@ -50,7 +49,7 @@ class UserInterfaceHandler:
                                          command=lambda: self.toggle_details())
         self.toggle_details_btn.grid(row=low_btn_row, column=1)
     
-    def _create_parabol_gui(self):
+    def _create_parabola_gui(self):
         self.proj1_label = Label(self.frame, font=("Helvetica", 12), text="Trajectory one", width=20)
         self.proj1_label.grid(row=self._next_row(), column=0, columnspan=2)
 
@@ -66,55 +65,55 @@ class UserInterfaceHandler:
 
         self.proj1_v0_input = Entry(self.frame, textvariable=self.proj1_v0)
         self.proj1_v0_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol,
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabola,
                                                                       self.proj1_v0.get(),
                                                                       'v0'))
 
         self.proj1_vx_input = Entry(self.frame, textvariable=self.proj1_vx)
         self.proj1_vx_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol,
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabola,
                                                                       self.proj1_vx.get(),
                                                                       'vx'))
 
         self.proj1_vy_input = Entry(self.frame, textvariable=self.proj1_vy)
         self.proj1_vy_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol,
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabola,
                                                                       self.proj1_vy.get(),
                                                                       'vy'))
 
         self.proj1_vz_input = Entry(self.frame, textvariable=self.proj1_vz)
         self.proj1_vz_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol,
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabola,
                                                                       self.proj1_vz.get(),
                                                                       'vz'))
 
         self.proj1_x0_input = Entry(self.frame, textvariable=self.proj1_x0)
         self.proj1_x0_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol,
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabola,
                                                                       self.proj1_x0.get(),
                                                                       'x0'))
 
         self.proj1_y0_input = Entry(self.frame, textvariable=self.proj1_y0)
         self.proj1_y0_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol,
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabola,
                                                                       self.proj1_y0.get(),
                                                                       'y0'))
 
         self.proj1_z0_input = Entry(self.frame, textvariable=self.proj1_z0)
         self.proj1_z0_input.bind('<Return>',
-                                 lambda event: self.projectile_change(event, self.vis.plotter.parabol,
+                                 lambda event: self.projectile_change(event, self.vis.plotter.parabola,
                                                                       self.proj1_z0.get(),
                                                                       'z0'))
 
         self.proj1_alpha_input = Scale(self.frame, tickinterval=0.01, from_=0, to=90, orient=HORIZONTAL,
                                        variable=self.proj1_alpha, length=120)
-        self.proj1_alpha_input.bind('<B1-Motion>', lambda event: self.projectile_change(event, self.vis.plotter.parabol,
+        self.proj1_alpha_input.bind('<B1-Motion>', lambda event: self.projectile_change(event, self.vis.plotter.parabola,
                                                                                         self.proj1_alpha.get(),
                                                                                         'alpha'))
 
         self.proj1_theta_input = Scale(self.frame, tickinterval=0.01, from_=0, to=360, orient=HORIZONTAL,
                                        variable=self.proj1_theta, length=120)
-        self.proj1_theta_input.bind('<B1-Motion>', lambda event: self.projectile_change(event, self.vis.plotter.parabol,
+        self.proj1_theta_input.bind('<B1-Motion>', lambda event: self.projectile_change(event, self.vis.plotter.parabola,
                                                                                         self.proj1_theta.get(),
                                                                                         'theta'))
 

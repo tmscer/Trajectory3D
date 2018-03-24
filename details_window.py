@@ -14,7 +14,7 @@ try:
 except ImportError:
     raise ImportError("Visualizer requires module tkinter")
 
-from projectile import *
+from parabola import *
 from plotter import *
 from scrollable_side_panel import *
 import numpy as np

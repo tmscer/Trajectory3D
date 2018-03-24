@@ -18,4 +18,3 @@ ax.plot([0], [0], 'ko')
 
 
 theta2 = np.arange(-np.pi / 6, -np.pi / 6 - np.pi - step, step)
-half
