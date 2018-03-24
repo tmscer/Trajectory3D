@@ -65,25 +65,32 @@ class DetailsWindow(Toplevel):
         self.top_spacer = Label(self.side_panel, text="\t\t\t", width=5)
         self.top_spacer.grid(row=self._next_row(), column=0)
 
-        object_values = ['Parabolic Trajectory', 'Spiral Trajectory', 'Plane']
+        # LOCK AXIS
+        self.lock_axis = IntVar()
+        self.lock_axis_input = Checkbutton(self.side_panel, text="Lock Axis", variable=self.lock_axis,
+                                           command=lambda *args: self.redraw())
+        self.lock_axis_input.grid(row=self._next_row(), column=0)
+
+        # OBJECTS
+        object_values = ['Parabolic Trajectory', 'Spiral Trajectory']
         self.object_selection_value = StringVar()
         self.object_selection_value.set(object_values[0])
         self.object_selection_value.trace('w', lambda *args: self.change_selected_object(self.object_selection_value.get()))
         self.object_selection_label = Label(self.side_panel, text="Selected Object: ")
         self.object_selection_input = OptionMenu(self.side_panel, self.object_selection_value,
-                                                 'Parabolic Trajectory', 'Spiral Trajectory', 'Plane',
+                                                 'Parabolic Trajectory', 'Spiral Trajectory',
                                                  command=lambda *args: self.change_selected_object(self.object_selection_value.get()))
         obj_selection_row = self._next_row()
         self.object_selection_label.grid(row=obj_selection_row, column=0, sticky=E)
         self.object_selection_input.grid(row=obj_selection_row, column=1, sticky=W)
 
-        self.parabola_frame = ParabolaDetailsFrame(self.canvas, self.axis, self.vis.plotter.parabola, master=self.side_panel)
-        self.spiral_frame = SpiralDetailsFrame(self.canvas, self.axis, self.vis.plotter.spiral, master=self.side_panel)
-        self.plane_frame = PlaneDetailsFrame(self.canvas, self.axis, self.vis.plotter.plane, master=self.side_panel)
+        self.parabola_frame = ParabolaDetailsFrame(self, self.axis, self.vis.plotter.parabola, master=self.side_panel)
+        self.spiral_frame = SpiralDetailsFrame(self, self.axis, self.vis.plotter.spiral, master=self.side_panel)
 
         self.parabola_frame.grid(row=self._next_row(), column=0, sticky=E)
         self.spiral_frame.grid(row=self._next_row(), column=0, sticky=E)
-        self.plane_frame.grid(row=self._next_row(), column=0, sticky=E)
+
+        self.change_selected_object('Parabolic Trajectory')
 
     def change_selected_object(self, new_obj):
         self.axis.clear()
@@ -91,18 +98,13 @@ class DetailsWindow(Toplevel):
             self.parabola_frame.grid()
             self.parabola_frame.on_focus()
             self.spiral_frame.grid_remove()
-            self.plane_frame.grid_remove()
         elif new_obj == 'Spiral Trajectory':
             self.parabola_frame.grid_remove()
             self.spiral_frame.grid()
             self.spiral_frame.on_focus()
-            self.plane_frame.grid_remove()
-        elif new_obj == 'Plane':
-            self.parabola_frame.grid_remove()
-            self.spiral_frame.grid_remove()
-            self.plane_frame.grid()
-            self.plane_frame.on_focus()
+
         self.axis.grid()
+        self.canvas.draw()
 
     def redraw(self):
         if self.object_selection_value.get() == 'Parabolic Trajectory':

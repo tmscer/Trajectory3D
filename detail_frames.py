@@ -16,9 +16,9 @@ class _DetailsFrame(Frame):
 
 class ParabolaDetailsFrame(_DetailsFrame):
 
-    def __init__(self, canvas, axis, parabola, **kw):
+    def __init__(self, parent, axis, parabola, **kw):
         super().__init__(**kw)
-        self.canvas = canvas
+        self.parent = parent
         self.axis = axis
         self.parabola = parabola
 
@@ -52,6 +52,7 @@ class ParabolaDetailsFrame(_DetailsFrame):
         self.line_y = self.axis.plot([], [], label='Y')[0]
         self.line_z = self.axis.plot([], [], label='Z')[0]
         self.line_vel_y = self.axis.plot([], [], label='VEL Y')[0]
+        self.redraw()
 
     def redraw(self):
         X, Y, Z, T = self.parabola.calculate_trajectory()
@@ -83,17 +84,19 @@ class ParabolaDetailsFrame(_DetailsFrame):
         else:
             self.line_vel_y.set_xdata([])
             self.line_vel_y.set_ydata([])
-        self.axis.relim()
-        self.axis.autoscale_view()
-        self.canvas.draw()
+
+        if self.parent.lock_axis.get() == 0:
+            self.axis.relim()
+            self.axis.autoscale_view()
+        self.parent.canvas.draw()
 
 
 class SpiralDetailsFrame(_DetailsFrame):
 
-    def __init__(self, canvas, axis, spiral, **kw):
+    def __init__(self, parent, axis, spiral, **kw):
         super().__init__(**kw)
         self.spiral = spiral
-        self.canvas = canvas
+        self.parent = parent
         self.axis = axis
 
         self.show_pos_x = IntVar()
@@ -136,6 +139,7 @@ class SpiralDetailsFrame(_DetailsFrame):
         self.line_vel_x = self.axis.plot([], [], label='VEL X')[0]
         self.line_vel_y = self.axis.plot([], [], label='VEL Y')[0]
         self.line_vel_z = self.axis.plot([], [], label='VEL Z')[0]
+        self.redraw()
 
     def redraw(self):
         X, Y, Z, T = self.spiral.calculate_trajectory(time_step=0.01)
@@ -184,13 +188,7 @@ class SpiralDetailsFrame(_DetailsFrame):
         else:
             self.line_vel_z.set_xdata([])
             self.line_vel_z.set_ydata([])
-        self.axis.relim()
-        self.axis.autoscale_view()
-        self.canvas.draw()
-
-
-class PlaneDetailsFrame(_DetailsFrame):
-
-    def __init__(self, canvas, axis, plane, **kw):
-        super().__init__(**kw)
-        self.plane = plane
+        if self.parent.lock_axis.get() == 0:
+            self.axis.relim()
+            self.axis.autoscale_view()
+        self.parent.canvas.draw()

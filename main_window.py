@@ -65,7 +65,7 @@ class MainWindow:
         self.toggle_details_btn.grid(row=low_btn_row, column=1)
     
     def _create_parabola_gui(self):
-        self.proj1_label = Label(self.side_panel, font=style.panel.large_text, text="Trajectory one", width=20)
+        self.proj1_label = Label(self.side_panel, font=style.panel.large_text, text="Parabolic Trajectory", width=20)
         self.proj1_label.grid(row=self._next_row(), column=0, columnspan=2)
 
         self.proj1_v0 = DoubleVar()
