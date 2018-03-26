@@ -68,6 +68,9 @@ class MainWindow:
         self.proj1_label = Label(self.side_panel, font=style.panel.large_text, text="Parabolic Trajectory", width=20)
         self.proj1_label.grid(row=self._next_row(), column=0, columnspan=2)
 
+        self.parabola_prescript = Label(self.side_panel, text="x(t) = v0 * cos (alpha) * cos(omega) * t + x0\ny(t) = v0 * sin(alpha) - 0.5 * g * t ** 2 + y0\nz(t) = v0 * cos(alpha) * sin(omega) * t + z0")
+        self.parabola_prescript.grid(row=self._next_row(), column=0, columnspan=2)
+
         self.proj1_v0 = DoubleVar()
         self.proj1_vx = DoubleVar()
         self.proj1_vy = DoubleVar()
