@@ -27,20 +27,20 @@ class ParabolaDetailsFrame(_DetailsFrame):
         self.show_pos_z = IntVar()
         self.show_vel_y = IntVar()
 
-        self.show_pos_x_input = Checkbutton(self, text="Show X", variable=self.show_pos_x)
-        self.show_pos_y_input = Checkbutton(self, text="Show Y", variable=self.show_pos_y)
-        self.show_pos_z_input = Checkbutton(self, text="Show Z", variable=self.show_pos_z)
-        self.show_vel_y_input = Checkbutton(self, text="Show Vy", variable=self.show_vel_y)
+        self.show_pos_x_input = Checkbutton(self, text="Show X (blue)", variable=self.show_pos_x)
+        self.show_pos_y_input = Checkbutton(self, text="Show Y (orange)", variable=self.show_pos_y)
+        self.show_pos_z_input = Checkbutton(self, text="Show Z (green)", variable=self.show_pos_z)
+        self.show_vel_y_input = Checkbutton(self, text="Show Vy (red)", variable=self.show_vel_y)
 
         self.show_pos_x.trace('w', lambda *args: self.redraw())
         self.show_pos_y.trace('w', lambda *args: self.redraw())
         self.show_pos_z.trace('w', lambda *args: self.redraw())
         self.show_vel_y.trace('w', lambda *args: self.redraw())
 
-        self.show_pos_x_input.grid(row=self._next_row(), column=0, columnspan=2)
-        self.show_pos_y_input.grid(row=self._next_row(), column=0, columnspan=2)
-        self.show_pos_z_input.grid(row=self._next_row(), column=0, columnspan=2)
-        self.show_vel_y_input.grid(row=self._next_row(), column=0, columnspan=2)
+        self.show_pos_x_input.pack(anchor=W)
+        self.show_pos_y_input.pack(anchor=W)
+        self.show_pos_z_input.pack(anchor=W)
+        self.show_vel_y_input.pack(anchor=W)
 
         self._on_focus()
 
@@ -106,12 +106,12 @@ class SpiralDetailsFrame(_DetailsFrame):
         self.show_vel_y = IntVar()
         self.show_vel_z = IntVar()
 
-        self.show_pos_x_input = Checkbutton(self, text="Show X", variable=self.show_pos_x)
-        self.show_pos_y_input = Checkbutton(self, text="Show Y", variable=self.show_pos_y)
-        self.show_pos_z_input = Checkbutton(self, text="Show Z", variable=self.show_pos_z)
-        self.show_vel_x_input = Checkbutton(self, text="Show Vx", variable=self.show_vel_x)
-        self.show_vel_y_input = Checkbutton(self, text="Show Vy", variable=self.show_vel_y)
-        self.show_vel_z_input = Checkbutton(self, text="Show Vz", variable=self.show_vel_z)
+        self.show_pos_x_input = Checkbutton(self, text="Show X (blue)", variable=self.show_pos_x)
+        self.show_pos_y_input = Checkbutton(self, text="Show Y (orange)", variable=self.show_pos_y)
+        self.show_pos_z_input = Checkbutton(self, text="Show Z (green)", variable=self.show_pos_z)
+        self.show_vel_x_input = Checkbutton(self, text="Show Vx (red)", variable=self.show_vel_x)
+        self.show_vel_y_input = Checkbutton(self, text="Show Vy (purple)", variable=self.show_vel_y)
+        self.show_vel_z_input = Checkbutton(self, text="Show Vz (brown)", variable=self.show_vel_z)
 
         self.show_pos_x.trace('w', lambda *args: self.redraw())
         self.show_pos_y.trace('w', lambda *args: self.redraw())
@@ -120,12 +120,12 @@ class SpiralDetailsFrame(_DetailsFrame):
         self.show_vel_y.trace('w', lambda *args: self.redraw())
         self.show_vel_z.trace('w', lambda *args: self.redraw())
 
-        self.show_pos_x_input.grid(row=self._next_row(), column=0, columnspan=2)
-        self.show_pos_y_input.grid(row=self._next_row(), column=0, columnspan=2)
-        self.show_pos_z_input.grid(row=self._next_row(), column=0, columnspan=2)
-        self.show_vel_x_input.grid(row=self._next_row(), column=0, columnspan=2)
-        self.show_vel_y_input.grid(row=self._next_row(), column=0, columnspan=2)
-        self.show_vel_z_input.grid(row=self._next_row(), column=0, columnspan=2)
+        self.show_pos_x_input.pack(anchor=W)
+        self.show_pos_y_input.pack(anchor=W)
+        self.show_pos_z_input.pack(anchor=W)
+        self.show_vel_x_input.pack(anchor=W)
+        self.show_vel_y_input.pack(anchor=W)
+        self.show_vel_z_input.pack(anchor=W)
 
         self._on_focus()
 

@@ -31,8 +31,8 @@ class Plotter:
 
         self.plane = Plane(alpha=-np.pi/4, beta=0, c=-10)
 
-        self.spiral = Spiral(20, 20, self.plane, y0=50)
-        self.parabola = Parabola(self.plane, vel_x=10, vel_y=8, vel_z=25)
+        self.spiral = Spiral(radius=20, omega=7, plane=self.plane, y0=200, z0=40)
+        self.parabola = Parabola(self.plane, vel_x=-13.5, vel_y=28, vel_z=25, x0=50, y0=70)
 
         self.plot_projectile(self.parabola)
         self.plot_spiral(self.spiral)

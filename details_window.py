@@ -67,7 +67,7 @@ class DetailsWindow(Toplevel):
 
         # LOCK AXIS
         self.lock_axis = IntVar()
-        self.lock_axis_input = Checkbutton(self.side_panel, text="Lock Axis", variable=self.lock_axis,
+        self.lock_axis_input = Checkbutton(self.side_panel, text="Lock Axes", variable=self.lock_axis,
                                            command=lambda *args: self.redraw())
         self.lock_axis_input.grid(row=self._next_row(), column=0)
 
@@ -87,8 +87,8 @@ class DetailsWindow(Toplevel):
         self.parabola_frame = ParabolaDetailsFrame(self, self.axis, self.vis.plotter.parabola, master=self.side_panel)
         self.spiral_frame = SpiralDetailsFrame(self, self.axis, self.vis.plotter.spiral, master=self.side_panel)
 
-        self.parabola_frame.grid(row=self._next_row(), column=0, sticky=E)
-        self.spiral_frame.grid(row=self._next_row(), column=0, sticky=E)
+        self.parabola_frame.grid(row=self._next_row(), column=1, sticky=W)
+        self.spiral_frame.grid(row=self._next_row(), column=1, sticky=W)
 
         self.change_selected_object('Parabolic Trajectory')
 

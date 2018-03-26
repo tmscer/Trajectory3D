@@ -63,137 +63,141 @@ class MainWindow:
         self.toggle_details_btn = Button(self.side_panel, text="Details",
                                          command=lambda: self.toggle_details())
         self.toggle_details_btn.grid(row=low_btn_row, column=1)
-    
+
     def _create_parabola_gui(self):
-        self.proj1_label = Label(self.side_panel, font=style.panel.large_text, text="Parabolic Trajectory", width=20)
-        self.proj1_label.grid(row=self._next_row(), column=0, columnspan=2)
+        self.parabola_label = Label(self.side_panel, font=style.panel.large_text, text="Parabolic Trajectory", width=20)
+        self.parabola_label.grid(row=self._next_row(), column=0, columnspan=2)
 
         self.parabola_prescript = Label(self.side_panel, text="x(t) = v0 * cos (alpha) * cos(omega) * t + x0\ny(t) = v0 * sin(alpha) - 0.5 * g * t ** 2 + y0\nz(t) = v0 * cos(alpha) * sin(omega) * t + z0")
         self.parabola_prescript.grid(row=self._next_row(), column=0, columnspan=2)
 
-        self.proj1_v0 = DoubleVar()
-        self.proj1_vx = DoubleVar()
-        self.proj1_vy = DoubleVar()
-        self.proj1_vz = DoubleVar()
-        self.proj1_x0 = DoubleVar()
-        self.proj1_y0 = DoubleVar()
-        self.proj1_z0 = DoubleVar()
-        self.proj1_alpha = DoubleVar()
-        self.proj1_theta = DoubleVar()
+        self.parabola_v0 = DoubleVar()
+        self.parabola_vx = DoubleVar()
+        self.parabola_vy = DoubleVar()
+        self.parabola_vz = DoubleVar()
+        self.parabola_x0 = DoubleVar()
+        self.parabola_y0 = DoubleVar()
+        self.parabola_z0 = DoubleVar()
+        self.parabola_alpha = DoubleVar()
+        self.parabola_theta = DoubleVar()
 
-        self.proj1_v0_input = Entry(self.side_panel, textvariable=self.proj1_v0)
-        self.proj1_v0_input.bind('<Return>',
+        self.parabola_v0_input = Entry(self.side_panel, textvariable=self.parabola_v0)
+        self.parabola_v0_input.bind('<Return>',
                                  lambda event: self.parabola_change(event, self.vis.plotter.parabola,
-                                                                    self.proj1_v0.get(),
+                                                                    self.parabola_v0.get(),
                                                                       'v0'))
 
-        self.proj1_vx_input = Entry(self.side_panel, textvariable=self.proj1_vx)
-        self.proj1_vx_input.bind('<Return>',
+        self.parabola_vx_input = Entry(self.side_panel, textvariable=self.parabola_vx)
+        self.parabola_vx_input.bind('<Return>',
                                  lambda event: self.parabola_change(event, self.vis.plotter.parabola,
-                                                                    self.proj1_vx.get(),
+                                                                    self.parabola_vx.get(),
                                                                       'vx'))
 
-        self.proj1_vy_input = Entry(self.side_panel, textvariable=self.proj1_vy)
-        self.proj1_vy_input.bind('<Return>',
+        self.parabola_vy_input = Entry(self.side_panel, textvariable=self.parabola_vy)
+        self.parabola_vy_input.bind('<Return>',
                                  lambda event: self.parabola_change(event, self.vis.plotter.parabola,
-                                                                    self.proj1_vy.get(),
+                                                                    self.parabola_vy.get(),
                                                                       'vy'))
 
-        self.proj1_vz_input = Entry(self.side_panel, textvariable=self.proj1_vz)
-        self.proj1_vz_input.bind('<Return>',
+        self.parabola_vz_input = Entry(self.side_panel, textvariable=self.parabola_vz)
+        self.parabola_vz_input.bind('<Return>',
                                  lambda event: self.parabola_change(event, self.vis.plotter.parabola,
-                                                                    self.proj1_vz.get(),
+                                                                    self.parabola_vz.get(),
                                                                       'vz'))
 
-        self.proj1_x0_input = Entry(self.side_panel, textvariable=self.proj1_x0)
-        self.proj1_x0_input.bind('<Return>',
+        self.parabola_x0_input = Entry(self.side_panel, textvariable=self.parabola_x0)
+        self.parabola_x0_input.bind('<Return>',
                                  lambda event: self.parabola_change(event, self.vis.plotter.parabola,
-                                                                    self.proj1_x0.get(),
+                                                                    self.parabola_x0.get(),
                                                                       'x0'))
 
-        self.proj1_y0_input = Entry(self.side_panel, textvariable=self.proj1_y0)
-        self.proj1_y0_input.bind('<Return>',
+        self.parabola_y0_input = Entry(self.side_panel, textvariable=self.parabola_y0)
+        self.parabola_y0_input.bind('<Return>',
                                  lambda event: self.parabola_change(event, self.vis.plotter.parabola,
-                                                                    self.proj1_y0.get(),
+                                                                    self.parabola_y0.get(),
                                                                       'y0'))
 
-        self.proj1_z0_input = Entry(self.side_panel, textvariable=self.proj1_z0)
-        self.proj1_z0_input.bind('<Return>',
+        self.parabola_z0_input = Entry(self.side_panel, textvariable=self.parabola_z0)
+        self.parabola_z0_input.bind('<Return>',
                                  lambda event: self.parabola_change(event, self.vis.plotter.parabola,
-                                                                    self.proj1_z0.get(),
+                                                                    self.parabola_z0.get(),
                                                                       'z0'))
 
-        self.proj1_alpha_input = Scale(self.side_panel, tickinterval=0.01, from_=0, to=90, orient=HORIZONTAL,
-                                       variable=self.proj1_alpha, length=120)
-        self.proj1_alpha_input.bind('<B1-Motion>', lambda event: self.parabola_change(event, self.vis.plotter.parabola,
-                                                                                      self.proj1_alpha.get(),
+        self.parabola_alpha_input = Scale(self.side_panel, tickinterval=0.01, from_=0, to=90, orient=HORIZONTAL,
+                                       variable=self.parabola_alpha, length=120)
+        self.parabola_alpha_input.bind('<B1-Motion>', lambda event: self.parabola_change(event, self.vis.plotter.parabola,
+                                                                                      self.parabola_alpha.get(),
                                                                                         'alpha'))
 
-        self.proj1_theta_input = Scale(self.side_panel, tickinterval=0.01, from_=0, to=360, orient=HORIZONTAL,
-                                       variable=self.proj1_theta, length=120)
-        self.proj1_theta_input.bind('<B1-Motion>', lambda event: self.parabola_change(event, self.vis.plotter.parabola,
-                                                                                      self.proj1_theta.get(),
+        self.parabola_theta_input = Scale(self.side_panel, tickinterval=0.01, from_=0, to=360, orient=HORIZONTAL,
+                                       variable=self.parabola_theta, length=120)
+        self.parabola_theta_input.bind('<B1-Motion>', lambda event: self.parabola_change(event, self.vis.plotter.parabola,
+                                                                                      self.parabola_theta.get(),
                                                                                         'theta'))
 
         v0_row = self._next_row()
         vx_row = self._next_row()
         vy_row = self._next_row()
         vz_row = self._next_row()
-        self.proj1_v0_input.grid(row=v0_row, column=1)
-        self.proj1_vx_input.grid(row=vx_row, column=1)
-        self.proj1_vy_input.grid(row=vy_row, column=1)
-        self.proj1_vz_input.grid(row=vz_row, column=1)
+        self.parabola_v0_input.grid(row=v0_row, column=1)
+        self.parabola_vx_input.grid(row=vx_row, column=1)
+        self.parabola_vy_input.grid(row=vy_row, column=1)
+        self.parabola_vz_input.grid(row=vz_row, column=1)
 
         x0_row = self._next_row()
         y0_row = self._next_row()
         z0_row = self._next_row()
-        self.proj1_x0_input.grid(row=x0_row, column=1)
-        self.proj1_y0_input.grid(row=y0_row, column=1)
-        self.proj1_z0_input.grid(row=z0_row, column=1)
+        self.parabola_x0_input.grid(row=x0_row, column=1)
+        self.parabola_y0_input.grid(row=y0_row, column=1)
+        self.parabola_z0_input.grid(row=z0_row, column=1)
 
         alpha_row = next(self._row_counter)
         theta_row = self._next_row()
-        self.proj1_alpha_input.grid(row=alpha_row, column=1)
-        self.proj1_theta_input.grid(row=theta_row, column=1)
+        self.parabola_alpha_input.grid(row=alpha_row, column=1)
+        self.parabola_theta_input.grid(row=theta_row, column=1)
 
-        self.proj1_v0_label = Label(self.side_panel, text="v0:")
-        self.proj1_vx_label = Label(self.side_panel, text="vx:")
-        self.proj1_vy_label = Label(self.side_panel, text="vy:")
-        self.proj1_vz_label = Label(self.side_panel, text="vz:")
-        self.proj1_x0_label = Label(self.side_panel, text="x0:")
-        self.proj1_y0_label = Label(self.side_panel, text="y0:")
-        self.proj1_z0_label = Label(self.side_panel, text="z0:")
-        self.proj1_alpha_label = Label(self.side_panel, text="alpha:")
-        self.proj1_theta_label = Label(self.side_panel, text="theta:")
+        self.parabola_v0_label = Label(self.side_panel, text="v0:")
+        self.parabola_vx_label = Label(self.side_panel, text="vx:")
+        self.parabola_vy_label = Label(self.side_panel, text="vy:")
+        self.parabola_vz_label = Label(self.side_panel, text="vz:")
+        self.parabola_x0_label = Label(self.side_panel, text="x0:")
+        self.parabola_y0_label = Label(self.side_panel, text="y0:")
+        self.parabola_z0_label = Label(self.side_panel, text="z0:")
+        self.parabola_alpha_label = Label(self.side_panel, text="alpha:")
+        self.parabola_theta_label = Label(self.side_panel, text="theta:")
 
-        self.proj1_v0_label.grid(row=v0_row, column=0)
-        self.proj1_vx_label.grid(row=vx_row, column=0)
-        self.proj1_vy_label.grid(row=vy_row, column=0)
-        self.proj1_vz_label.grid(row=vz_row, column=0)
+        self.parabola_v0_label.grid(row=v0_row, column=0)
+        self.parabola_vx_label.grid(row=vx_row, column=0)
+        self.parabola_vy_label.grid(row=vy_row, column=0)
+        self.parabola_vz_label.grid(row=vz_row, column=0)
 
-        self.proj1_x0_label.grid(row=x0_row, column=0)
-        self.proj1_y0_label.grid(row=y0_row, column=0)
-        self.proj1_z0_label.grid(row=z0_row, column=0)
+        self.parabola_x0_label.grid(row=x0_row, column=0)
+        self.parabola_y0_label.grid(row=y0_row, column=0)
+        self.parabola_z0_label.grid(row=z0_row, column=0)
 
-        self.proj1_alpha_label.grid(row=alpha_row, column=0)
-        self.proj1_theta_label.grid(row=theta_row, column=0)
+        self.parabola_alpha_label.grid(row=alpha_row, column=0)
+        self.parabola_theta_label.grid(row=theta_row, column=0)
 
-        self.proj1_point_a = StringVar()
-        self.proj1_point_a_label = Label(self.side_panel, textvariable=self.proj1_point_a)
-        self.proj1_point_b = StringVar()
-        self.proj1_point_b_label = Label(self.side_panel, textvariable=self.proj1_point_b)
-        self.proj1_point_c = StringVar()
-        self.proj1_point_c_label = Label(self.side_panel, textvariable=self.proj1_point_c)
-        self.proj1_point_d = StringVar()
-        self.proj1_point_d_label = Label(self.side_panel, textvariable=self.proj1_point_d)
+        self.parabola_point_a = StringVar()
+        self.parabola_point_a_label = Label(self.side_panel, textvariable=self.parabola_point_a)
+        self.parabola_point_b = StringVar()
+        self.parabola_point_b_label = Label(self.side_panel, textvariable=self.parabola_point_b)
+        self.parabola_point_c = StringVar()
+        self.parabola_point_c_label = Label(self.side_panel, textvariable=self.parabola_point_c)
+        self.parabola_point_d = StringVar()
+        self.parabola_point_d_label = Label(self.side_panel, textvariable=self.parabola_point_d)
 
-        self.proj1_point_a_label.grid(row=self._next_row(), column=0, columnspan=2)
-        self.proj1_point_b_label.grid(row=self._next_row(), column=0, columnspan=2)
-        self.proj1_point_c_label.grid(row=self._next_row(), column=0, columnspan=2)
-        self.proj1_point_d_label.grid(row=self._next_row(), column=0, columnspan=2)
+        self.parabola_point_a_label.grid(row=self._next_row(), column=0, columnspan=2)
+        self.parabola_point_b_label.grid(row=self._next_row(), column=0, columnspan=2)
+        self.parabola_point_c_label.grid(row=self._next_row(), column=0, columnspan=2)
+        self.parabola_point_d_label.grid(row=self._next_row(), column=0, columnspan=2)
+
+        self.parabola_total_time_value = StringVar()
+        self.parabola_total_time_display = Label(self.side_panel, textvariable=self.parabola_total_time_value)
+        self.parabola_total_time_display.grid(row=self._next_row(), column=0, columnspan=2)
 
     def _create_spiral_gui(self):
-        self.spiral_label = Label(self.side_panel, text="Spiral", font=style.panel.large_text, width=20)
+        self.spiral_label = Label(self.side_panel, text="Spiral Trajectory", font=style.panel.large_text, width=20)
         self.spiral_prescript = Label(self.side_panel,
                                       text="x(t) = r * cos (omega * t) + x0\ny(t) = y0 - 0.5 * g * t ** 2\nz(t) = r * sin(omega * t) + z0")
         self.spiral_label.grid(row=self._next_row(), column=0, columnspan=2)
@@ -261,6 +265,19 @@ class MainWindow:
             row_index = self._next_row()
             self.spiral_labels[name].grid(row=row_index, column=0)
             self.spiral_inputs[name].grid(row=row_index, column=1)
+
+        self.spiral_start_point = StringVar()
+        self.spiral_final_point = StringVar()
+        self.spiral_time_value = StringVar()
+
+        self.spiral_start_point_display = Label(self.side_panel, textvariable=self.spiral_start_point)
+        self.spiral_start_point_display.grid(row=self._next_row(), column=0, columnspan=2)
+
+        self.spiral_final_point_display = Label(self.side_panel, textvariable=self.spiral_final_point)
+        self.spiral_final_point_display.grid(row=self._next_row(), column=0, columnspan=2)
+
+        self.spiral_total_time_display = Label(self.side_panel, textvariable=self.spiral_time_value)
+        self.spiral_total_time_display.grid(row=self._next_row(), column=0, columnspan=2)
 
     def _create_plane_gui(self):
         self.plane_label = Label(self.side_panel, text="Plane", font=style.panel.large_text, width=20)
@@ -381,6 +398,9 @@ class MainWindow:
         self.spiral_vars['y0'].set("{:.2f}".format(spiral.y0))
         self.spiral_vars['z0'].set("{:.2f}".format(spiral.z0))
         self.spiral_vars['phi0'].set("{:.2f}".format(spiral.phi0))
+        self.spiral_start_point.set("E = [{:.2f}, {:.2f}, {:.2f}]".format(spiral.x0, spiral.y0, spiral.z0))
+        self.spiral_final_point.set("F = [{:.2f}, {:.2f}, {:.2f}]".format(spiral._last_calc[0][-1], spiral._last_calc[1][-1], spiral._last_calc[2][-1]))
+        self.spiral_time_value.set("Total time: {:.2f} s".format(spiral._last_calc[3][-1]))
 
     def plane_change(self, event, plane, value, prop):
         angle = False
@@ -448,28 +468,29 @@ class MainWindow:
         self.vis.plotter.adjust_axes()
         self.vis.canvas.draw()
 
-    def update_projectile_inputs(self, traj, angle):
-        self.proj1_v0.set("{:.2f}".format(traj.v0))
-        self.proj1_vx.set("{:.2f}".format(traj.vel_x))
-        self.proj1_vy.set("{:.2f}".format(traj.vel_y))
-        self.proj1_vz.set("{:.2f}".format(traj.vel_z))
-        self.proj1_x0.set("{:.2f}".format(traj.x0))
-        self.proj1_y0.set("{:.2f}".format(traj.y0))
-        self.proj1_z0.set("{:.2f}".format(traj.z0))
+    def update_projectile_inputs(self, parabola, angle):
+        self.parabola_v0.set("{:.2f}".format(parabola.v0))
+        self.parabola_vx.set("{:.2f}".format(parabola.vel_x))
+        self.parabola_vy.set("{:.2f}".format(parabola.vel_y))
+        self.parabola_vz.set("{:.2f}".format(parabola.vel_z))
+        self.parabola_x0.set("{:.2f}".format(parabola.x0))
+        self.parabola_y0.set("{:.2f}".format(parabola.y0))
+        self.parabola_z0.set("{:.2f}".format(parabola.z0))
         if angle:
-            self.proj1_alpha.set(math.degrees(traj.alpha))
-            self.proj1_theta.set(math.degrees(traj.theta))
+            self.parabola_alpha.set(math.degrees(parabola.alpha))
+            self.parabola_theta.set(math.degrees(parabola.theta))
+        self.parabola_total_time_value.set("Total time: {:.2f} s".format(parabola._last_calc[3][-1]))
 
     def update_parabola_points(self, parabola):
         a_pos = parabola.a_pos()
-        self.proj1_point_a.set("A = [{:.2f} , {:.2f} , {:.2f}]".format(a_pos[0], a_pos[1], a_pos[2]))
+        self.parabola_point_a.set("A = [{:.2f} , {:.2f} , {:.2f}]".format(a_pos[0], a_pos[1], a_pos[2]))
         b_pos = parabola.b_pos()
-        self.proj1_point_b.set("B = [{:.2f} , {:.2f} , {:.2f}]".format(b_pos[0], b_pos[1], b_pos[2]))
+        self.parabola_point_b.set("B = [{:.2f} , {:.2f} , {:.2f}]".format(b_pos[0], b_pos[1], b_pos[2]))
         c_pos = parabola.c_pos()
-        self.proj1_point_c.set("C = [{:.2f} , {:.2f} , {:.2f}]".format(c_pos[0], c_pos[1], c_pos[2]))
+        self.parabola_point_c.set("C = [{:.2f} , {:.2f} , {:.2f}]".format(c_pos[0], c_pos[1], c_pos[2]))
         d_pos = parabola.d_pos()
         if None not in d_pos:
-            self.proj1_point_d.set("D = [{:.2f} , {:.2f} , {:.2f}]".format(d_pos[0], d_pos[1], d_pos[2]))
+            self.parabola_point_d.set("D = [{:.2f} , {:.2f} , {:.2f}]".format(d_pos[0], d_pos[1], d_pos[2]))
 
     def display_coords(self, x, y):
         if x < 0:
@@ -482,6 +503,6 @@ class MainWindow:
             pol_y = '+'
         self.coord.set("[{}{:2.3f} , {}{:2.3f}]".format(pol_x, abs(x), pol_y, abs(y)))
         return ''
-    
+
     def _next_row(self):
         return next(self._row_counter)
