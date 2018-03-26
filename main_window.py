@@ -45,7 +45,7 @@ class MainWindow:
         self.globals_label.grid(row=self._next_row(), column=0, columnspan=2)
 
         self.g_value = DoubleVar()
-        self.g_label = Label(self.side_panel)
+        self.g_label = Label(self.side_panel, text='g:')
         self.g_input = Entry(self.side_panel, textvariable=self.g_value)
         self.g_input.bind('<Return>',
                           lambda event: self.grav_acceleration_change(event, self.g_value.get()))

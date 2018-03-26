@@ -4,10 +4,8 @@ import math
 try:
     import matplotlib
     matplotlib.use('TkAgg')
-    from matplotlib.figure import Figure
     from matplotlib import pyplot
     from matplotlib import style
-    from mpl_toolkits.mplot3d import axes3d
 except ImportError:
     raise ImportError("Visualizer requires module Matplotlib")
 
@@ -29,7 +27,7 @@ class Visualizer:
         pyplot.style.use(app_style.plot.style)
         self.tk_root = tkinter.Tk()
 
-        self.tk_root.wm_title("Trajectory Vis")
+        self.tk_root.wm_title("Trajectory Visualization")
 
         self.figure = pyplot.figure()
 
