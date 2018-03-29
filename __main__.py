@@ -1,0 +1,3 @@
+import visualizer
+
+visualizer.run()

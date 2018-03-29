@@ -5,6 +5,7 @@
       <list>
         <option value="$PROJECT_DIR$/venv" />
         <option value="$PROJECT_DIR$/.idea" />
+        <option value="$PROJECT_DIR$/tests" />
       </list>
     </option>
   </component>
