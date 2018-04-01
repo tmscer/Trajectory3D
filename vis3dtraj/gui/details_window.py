@@ -13,12 +13,9 @@ try:
 except ImportError:
     raise ImportError("Visualizer requires module tkinter")
 
-import app_style as style
-from detail_frames import *
-from parabola import *
-from plotter import *
-from scrollable_side_panel import *
-import numpy as np
+from vis3dtraj import app_style as style
+from vis3dtraj.gui.detail_frames import *
+from vis3dtraj.gui.scrollable_side_panel import *
 import itertools
 
 
@@ -84,8 +81,8 @@ class DetailsWindow(Toplevel):
         self.object_selection_label.grid(row=obj_selection_row, column=0, sticky=E)
         self.object_selection_input.grid(row=obj_selection_row, column=1, sticky=W)
 
-        self.parabola_frame = ParabolaDetailsFrame(self, self.axis, self.vis.plotter.parabola, master=self.side_panel)
-        self.spiral_frame = SpiralDetailsFrame(self, self.axis, self.vis.plotter.spiral, master=self.side_panel)
+        self.parabola_frame = ParabolaDetailsFrame(self, self.axis, self.vis.plot_mngr.parabola, master=self.side_panel)
+        self.spiral_frame = SpiralDetailsFrame(self, self.axis, self.vis.plot_mngr.spiral, master=self.side_panel)
 
         self.parabola_frame.grid(row=self._next_row(), column=1, sticky=W)
         self.spiral_frame.grid(row=self._next_row(), column=1, sticky=W)

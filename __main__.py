@@ -1,3 +1,3 @@
-import visualizer
+import vis3dtraj
 
-visualizer.run()
+vis3dtraj.visualizer.run()

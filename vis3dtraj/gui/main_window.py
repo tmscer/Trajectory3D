@@ -1,5 +1,4 @@
 import math
-import itertools
 
 try:
     from matplotlib import pyplot
@@ -11,9 +10,8 @@ try:
 except ImportError:
     raise ImportError("Visualizer require module tkinter")
 
-import app_style as style
-from details_window import *
-from scrollable_side_panel import *
+from vis3dtraj.gui.details_window import *
+from vis3dtraj.gui.scrollable_side_panel import *
 
 
 class MainWindow:
@@ -56,7 +54,7 @@ class MainWindow:
         low_btn_row = row = self._next_row()
 
         self.plane_update_btn = Button(self.side_panel, text="Update Plane",
-                                       command=lambda: self.plane_change(None, self.vis.plotter.plane, None, ''))
+                                       command=lambda: self.plane_change(None, self.vis.plot_mngr.plane, None, ''))
         self.plane_update_btn.grid(row=low_btn_row, column=0)
 
         self.details_window = None
@@ -83,55 +81,55 @@ class MainWindow:
 
         self.parabola_v0_input = Entry(self.side_panel, textvariable=self.parabola_v0)
         self.parabola_v0_input.bind('<Return>',
-                                 lambda event: self.parabola_change(event, self.vis.plotter.parabola,
+                                 lambda event: self.parabola_change(event, self.vis.plot_mngr.parabola,
                                                                     self.parabola_v0.get(),
                                                                       'v0'))
 
         self.parabola_vx_input = Entry(self.side_panel, textvariable=self.parabola_vx)
         self.parabola_vx_input.bind('<Return>',
-                                 lambda event: self.parabola_change(event, self.vis.plotter.parabola,
+                                 lambda event: self.parabola_change(event, self.vis.plot_mngr.parabola,
                                                                     self.parabola_vx.get(),
                                                                       'vx'))
 
         self.parabola_vy_input = Entry(self.side_panel, textvariable=self.parabola_vy)
         self.parabola_vy_input.bind('<Return>',
-                                 lambda event: self.parabola_change(event, self.vis.plotter.parabola,
+                                 lambda event: self.parabola_change(event, self.vis.plot_mngr.parabola,
                                                                     self.parabola_vy.get(),
                                                                       'vy'))
 
         self.parabola_vz_input = Entry(self.side_panel, textvariable=self.parabola_vz)
         self.parabola_vz_input.bind('<Return>',
-                                 lambda event: self.parabola_change(event, self.vis.plotter.parabola,
+                                 lambda event: self.parabola_change(event, self.vis.plot_mngr.parabola,
                                                                     self.parabola_vz.get(),
                                                                       'vz'))
 
         self.parabola_x0_input = Entry(self.side_panel, textvariable=self.parabola_x0)
         self.parabola_x0_input.bind('<Return>',
-                                 lambda event: self.parabola_change(event, self.vis.plotter.parabola,
+                                 lambda event: self.parabola_change(event, self.vis.plot_mngr.parabola,
                                                                     self.parabola_x0.get(),
                                                                       'x0'))
 
         self.parabola_y0_input = Entry(self.side_panel, textvariable=self.parabola_y0)
         self.parabola_y0_input.bind('<Return>',
-                                 lambda event: self.parabola_change(event, self.vis.plotter.parabola,
+                                 lambda event: self.parabola_change(event, self.vis.plot_mngr.parabola,
                                                                     self.parabola_y0.get(),
                                                                       'y0'))
 
         self.parabola_z0_input = Entry(self.side_panel, textvariable=self.parabola_z0)
         self.parabola_z0_input.bind('<Return>',
-                                 lambda event: self.parabola_change(event, self.vis.plotter.parabola,
+                                 lambda event: self.parabola_change(event, self.vis.plot_mngr.parabola,
                                                                     self.parabola_z0.get(),
                                                                       'z0'))
 
         self.parabola_alpha_input = Scale(self.side_panel, tickinterval=0.01, from_=0, to=90, orient=HORIZONTAL,
                                        variable=self.parabola_alpha, length=120)
-        self.parabola_alpha_input.bind('<B1-Motion>', lambda event: self.parabola_change(event, self.vis.plotter.parabola,
+        self.parabola_alpha_input.bind('<B1-Motion>', lambda event: self.parabola_change(event, self.vis.plot_mngr.parabola,
                                                                                       self.parabola_alpha.get(),
                                                                                         'alpha'))
 
         self.parabola_theta_input = Scale(self.side_panel, tickinterval=0.01, from_=0, to=360, orient=HORIZONTAL,
                                        variable=self.parabola_theta, length=120)
-        self.parabola_theta_input.bind('<B1-Motion>', lambda event: self.parabola_change(event, self.vis.plotter.parabola,
+        self.parabola_theta_input.bind('<B1-Motion>', lambda event: self.parabola_change(event, self.vis.plot_mngr.parabola,
                                                                                       self.parabola_theta.get(),
                                                                                         'theta'))
 
@@ -207,7 +205,7 @@ class MainWindow:
         self.spiral_locked_var.set('radius')  # default value
 
         def lm(*args):
-            self.vis.plotter.spiral.locked_var = self.spiral_locked_var.get()
+            self.vis.plot_mngr.spiral.locked_var = self.spiral_locked_var.get()
 
         self.spiral_locked_var.trace('w', lm)
 
@@ -227,37 +225,37 @@ class MainWindow:
         self.spiral_inputs = {label: Entry(self.side_panel, textvariable=self.spiral_vars[label]) for label in
                               self.spiral_value_names}
 
-        self.spiral_inputs['radius'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+        self.spiral_inputs['radius'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plot_mngr.spiral,
                                                                                        self.spiral_vars['radius'].get(),
                                                                                        'radius'))
-        self.spiral_inputs['velocity'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+        self.spiral_inputs['velocity'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plot_mngr.spiral,
                                                                                          self.spiral_vars[
                                                                                              'velocity'].get(),
                                                                                          'velocity'))
-        self.spiral_inputs['omega'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+        self.spiral_inputs['omega'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plot_mngr.spiral,
                                                                                       self.spiral_vars['omega'].get(),
                                                                                       'omega'))
         self.spiral_inputs['acceleration'].bind('<Return>',
-                                                lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+                                                lambda event: self.spiral_change(event, self.vis.plot_mngr.spiral,
                                                                                  self.spiral_vars['acceleration'].get(),
                                                                                  'acceleration'))
-        self.spiral_inputs['period'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+        self.spiral_inputs['period'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plot_mngr.spiral,
                                                                                        self.spiral_vars['period'].get(),
                                                                                        'period'))
         self.spiral_inputs['frequency'].bind('<Return>',
-                                             lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+                                             lambda event: self.spiral_change(event, self.vis.plot_mngr.spiral,
                                                                               self.spiral_vars['frequency'].get(),
                                                                               'frequency'))
-        self.spiral_inputs['x0'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+        self.spiral_inputs['x0'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plot_mngr.spiral,
                                                                                    self.spiral_vars['x0'].get(),
                                                                                    'x0'))
-        self.spiral_inputs['y0'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+        self.spiral_inputs['y0'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plot_mngr.spiral,
                                                                                    self.spiral_vars['y0'].get(),
                                                                                    'y0'))
-        self.spiral_inputs['z0'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+        self.spiral_inputs['z0'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plot_mngr.spiral,
                                                                                    self.spiral_vars['z0'].get(),
                                                                                    'z0'))
-        self.spiral_inputs['phi0'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plotter.spiral,
+        self.spiral_inputs['phi0'].bind('<Return>', lambda event: self.spiral_change(event, self.vis.plot_mngr.spiral,
                                                                                      self.spiral_vars['phi0'].get(),
                                                                                      'phi0'))
 
@@ -306,23 +304,23 @@ class MainWindow:
 
         self.plane_a_input = Entry(self.side_panel, textvariable=self.plane_a)
         self.plane_a_input.bind('<Return>',
-                                lambda event: self.plane_change(event, self.vis.plotter.plane, self.plane_a.get(), 'a'))
+                                lambda event: self.plane_change(event, self.vis.plot_mngr.plane, self.plane_a.get(), 'a'))
         self.plane_b_input = Entry(self.side_panel, textvariable=self.plane_b)
         self.plane_b_input.bind('<Return>',
-                                lambda event: self.plane_change(event, self.vis.plotter.plane, self.plane_b.get(), 'b'))
+                                lambda event: self.plane_change(event, self.vis.plot_mngr.plane, self.plane_b.get(), 'b'))
         self.plane_c_input = Entry(self.side_panel, textvariable=self.plane_c)
         self.plane_c_input.bind('<Return>',
-                                lambda event: self.plane_change(event, self.vis.plotter.plane, self.plane_c.get(), 'c'))
+                                lambda event: self.plane_change(event, self.vis.plot_mngr.plane, self.plane_c.get(), 'c'))
 
         self.plane_alpha_input = Scale(self.side_panel, variable=self.plane_alpha, tickinterval=0.01, from_=-80,
                                        to=80, orient=HORIZONTAL, length=120)
-        self.plane_alpha_input.bind('<B1-Motion>', lambda event: self.plane_change(event, self.vis.plotter.plane,
+        self.plane_alpha_input.bind('<B1-Motion>', lambda event: self.plane_change(event, self.vis.plot_mngr.plane,
                                                                                    self.plane_alpha.get(), 'alpha'))
 
         self.plane_beta_input = Scale(self.side_panel, variable=self.plane_beta, tickinterval=0.01, from_=-80, to=80,
                                       orient=HORIZONTAL, length=120)
         self.plane_beta_input.bind('<B1-Motion>',
-                                   lambda event: self.plane_change(event, self.vis.plotter.plane, self.plane_beta.get(),
+                                   lambda event: self.plane_change(event, self.vis.plot_mngr.plane, self.plane_beta.get(),
                                                                    'beta'))
 
         self.plane_a_label.grid(row=a_row, column=0)
@@ -346,18 +344,18 @@ class MainWindow:
 
     def grav_acceleration_change(self, event, value):
         if value > 0:
-            self.vis.plotter.parabola.g = value
-            self.vis.plotter.spiral.g = value
+            self.vis.plot_mngr.parabola.g = value
+            self.vis.plot_mngr.spiral.g = value
             # Update Parabola
-            self.vis.plotter.update_traj()
-            self.update_parabola_points(self.vis.plotter.parabola)
+            self.vis.plot_mngr.update_traj()
+            self.update_parabola_points(self.vis.plot_mngr.parabola)
             # Update Spiral
-            self.vis.plotter.update_spiral()
+            self.vis.plot_mngr.update_spiral()
             self.vis.canvas.draw()
-        self.g_value.set(self.vis.plotter.parabola.g)
+        self.g_value.set(self.vis.plot_mngr.parabola.g)
         if self.details_window is not None:
             self.details_window.redraw()
-        self.vis.plotter.adjust_axes()
+        self.vis.plot_mngr.adjust_axes()
 
     def spiral_change(self, event, spiral, value, prop):
         if prop == 'radius':
@@ -381,10 +379,10 @@ class MainWindow:
         elif prop == 'phi0':
             spiral.phi0 = value
         self.update_spiral_inputs(spiral)
-        self.vis.plotter.update_spiral()
+        self.vis.plot_mngr.update_spiral()
         if self.details_window is not None:
             self.details_window.redraw()
-        self.vis.plotter.adjust_axes()
+        self.vis.plot_mngr.adjust_axes()
         self.vis.canvas.draw()
 
     def update_spiral_inputs(self, spiral):
@@ -423,12 +421,12 @@ class MainWindow:
             plane.beta = math.radians(value)
             self.plane_beta.set("{:.2f}".format(math.degrees(plane.beta)))
             self.plane_b.set("{:.2f}".format(plane.b))
-        self.vis.plotter.update_plane(plane)
-        self.vis.plotter.update_traj()
-        self.vis.plotter.update_spiral()
+        self.vis.plot_mngr.update_plane(plane)
+        self.vis.plot_mngr.update_traj()
+        self.vis.plot_mngr.update_spiral()
         if self.details_window is not None:
             self.details_window.redraw()
-        self.vis.plotter.adjust_axes()
+        self.vis.plot_mngr.adjust_axes()
         self.vis.canvas.draw()
 
     def update_plane_inputs(self, plane):
@@ -462,10 +460,10 @@ class MainWindow:
             parabola.theta = math.radians(value)
         self.update_projectile_inputs(parabola, angle)
         self.update_parabola_points(parabola)
-        self.vis.plotter.update_traj()
+        self.vis.plot_mngr.update_traj()
         if self.details_window is not None:
             self.details_window.redraw()
-        self.vis.plotter.adjust_axes()
+        self.vis.plot_mngr.adjust_axes()
         self.vis.canvas.draw()
 
     def update_projectile_inputs(self, parabola, angle):

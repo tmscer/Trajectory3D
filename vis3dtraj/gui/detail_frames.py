@@ -1,7 +1,5 @@
 from tkinter import *
 import itertools
-import matplotlib.pyplot as plt
-import app_style as style
 
 
 class _DetailsFrame(Frame):

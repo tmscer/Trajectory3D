@@ -2,13 +2,21 @@ class _Plot:
 
     style = 'default'
 
-    left = 0.1
-    right = 0.95
-    top = 0.95
-    bottom = 0.06
-    wspace = 0.15
+    subplot_kwargs = {
+        'left': 0.1,
+        'right': 0.95,
+        'top': 0.95,
+        'bottom': 0.06,
+        'wspace': 0.15,
+    }
 
     label_font_size = 13
+
+    grid_kwargs = {
+        'color': 'grey',
+        'linewidth': 0.5,
+        'linestyle': '--',
+    }
 
 
 class _Panel:

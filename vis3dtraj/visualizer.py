@@ -1,5 +1,4 @@
 #!/bin/env python
-import math
 
 try:
     import matplotlib
@@ -15,10 +14,9 @@ try:
 except ImportError:
     raise ImportError("Visualizer requires module tkinter")
 
-import app_style
-from parabola import Parabola
-from plotter import Plotter
-from main_window import MainWindow
+from vis3dtraj import app_style
+from vis3dtraj.plot_manager import Plotter
+from vis3dtraj.gui.main_window import MainWindow
 
 
 class Visualizer:
@@ -39,22 +37,18 @@ class Visualizer:
         self.canvas.show()
         self.toolbar.update()
 
-        pyplot.subplots_adjust(left=0.045, right=1-0.045, top=0.95, bottom=0.06, wspace=0.15)
+        pyplot.subplots_adjust(app_style.plot.subplot_kwargs)
 
-        self.plotter = None
+        self.plot_mngr = None
 
         # Sets up the ui
         self.ui_handler = MainWindow(self)
+        self.plot_mngr = Plotter(self)
 
-        self.plotter = Plotter(self)
-
-        self.ui_handler.update_projectile_inputs(self.plotter.parabola, True)
-        self.ui_handler.update_plane_inputs(self.plotter.plane)
-        self.ui_handler.update_spiral_inputs(self.plotter.spiral)
+        self.ui_handler.update_projectile_inputs(self.plot_mngr.parabola, True)
+        self.ui_handler.update_plane_inputs(self.plot_mngr.plane)
+        self.ui_handler.update_spiral_inputs(self.plot_mngr.spiral)
         self.ui_handler.grav_acceleration_change(None, 9.81)
-
-        #pyplot.xlim([-10, 10])
-        #pyplot.ylim([-10, 10])
 
         tkinter.mainloop()
 
