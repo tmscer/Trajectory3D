@@ -21,6 +21,13 @@ class Spiral:
         self._plane = plane
         self._locked_var = 'radius'  # other options: omega (meaning period and frequency too), velocity, acceleration
 
+    def __repr__(self):
+        return "Spiral(radius={}, omega={}, plane={}, x0={}, y0={}, z0={}, phi0={}, g={})"\
+            .format(self.radius, self.omega, self.plane, self.x0, self.y0, self.z0, self.phi0, self.g)
+
+    #def __str__(self):
+    #    return ""
+
     @property
     def locked_var(self):
         return self._locked_var
@@ -210,10 +217,10 @@ class Spiral:
         self._plane = value
 
     def intersection_proximity(self, t):
-        return self._plane.y_xz(self.x(t), self.z(t)) - self.y(t)
+        return self._plane.y_pos(self.x(t), self.z(t)) - self.y(t)
 
     def find_plane_intersection(self):
-        t_approx = math.sqrt(2 * self._g * (self._y0 - self._plane.y_xz(self._x0, self._z0))) / self._g
+        t_approx = math.sqrt(2 * self._g * (self._y0 - self._plane.y_pos(self._x0, self._z0))) / self._g
         y_deviation = self.intersection_proximity(t_approx)
         tolerance = 0.1
         if y_deviation < -tolerance:

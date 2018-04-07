@@ -29,7 +29,7 @@ class Plotter:
         for key in self.axes.keys():
             self.plots[key] = {}
 
-        self.plane = Plane(alpha=-np.pi/4, beta=0, c=-10)
+        self.plane = Plane.init_using_angles(alpha=-np.pi/4, c=-10)
 
         self.spiral = Spiral(radius=20, omega=7, plane=self.plane, y0=200, z0=40)
         self.parabola = Parabola(self.plane, vel_x=-13.5, vel_y=28, vel_z=25, x0=50, y0=70)
@@ -170,7 +170,7 @@ class Plotter:
         self.plots['xz'][parabola_id]['D'].set_ydata([Z[-1]])
 
     def plot_plane(self, plane):
-        coords = plane.get_coords(self.parabola._last_calc[0][0], self.parabola._last_calc[0][-1], self.parabola._last_calc[2][0], self.parabola._last_calc[2][-1])
+        coords = plane.get_coords(self.parabola.last_calc[0][0], self.parabola.last_calc[0][-1], self.parabola.last_calc[2][0], self.parabola.last_calc[2][-1])
         x = coords[0]
         y = coords[1]
         z = coords[2]
@@ -194,10 +194,10 @@ class Plotter:
     def update_plane(self, plane):
         plane_id = id(plane)
 
-        x, y, z = plane.get_coords(self.parabola._last_calc[0][0],
-                                   self.parabola._last_calc[0][-1],
-                                   self.parabola._last_calc[2][0],
-                                   self.parabola._last_calc[2][-1])
+        x, y, z = plane.get_coords(self.parabola.last_calc[0][0],
+                                   self.parabola.last_calc[0][-1],
+                                   self.parabola.last_calc[2][0],
+                                   self.parabola.last_calc[2][-1])
         for obj in self.plots['xyz'][plane_id].values():
             obj.remove()
 

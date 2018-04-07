@@ -38,11 +38,7 @@ class DetailsWindow(Toplevel):
         self.canvas.show()
         self.toolbar.update()
 
-        self.figure.subplots_adjust(left=style.plot.left,
-                                    right=style.plot.right,
-                                    top=style.plot.top,
-                                    bottom=style.plot.bottom,
-                                    wspace=style.plot.wspace)
+        self.figure.subplots_adjust(**style.plot.subplot_kwargs)
 
         self.side_frame = Frame(self, width=style.panel.width)
         self.side_frame.pack(side=RIGHT, fill=BOTH)

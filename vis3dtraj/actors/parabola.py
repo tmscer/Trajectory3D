@@ -4,11 +4,19 @@ import numpy as np
 
 class Parabola:
 
+    @classmethod
+    def init_using_vels_xyz(cls):
+        pass
+
+    @classmethod
+    def init_using_angles_vel0(cls):
+        pass
+
     def __init__(self, plane, vel_x=None, vel_y=None, vel_z=None, alpha=None, theta=None, v0=None, x0=0, y0=0, z0=0,
                  g=9.81):
         self._plane = plane
         self._last_values = None
-        self._last_calc = None
+        self.last_calc = None
         self._g = g
         self._x0 = x0
         self._y0 = y0
@@ -20,7 +28,7 @@ class Parabola:
         self._theta = theta
         self._v0 = v0
         if vel_x is not None and vel_y is not None and vel_z is not None:
-            self._xz = math.sqrt(self._vel_x ** 2 + self._vel_z ** 2)
+            self._xz = math.sqrt(self.vel_x ** 2 + self.vel_z ** 2)
             self._set_using_xyz()
             self._ok = True
         elif alpha is not None and theta is not None and v0 is not None:
@@ -29,17 +37,27 @@ class Parabola:
         else:
             self._ok = False
 
+    def __repr__(self):
+        return "Parabola(vel_x={}, vel_y={}, vel_z={}, alpha={}, theta={}, v0={}, x0={}, y0={}, z0={}, g={})"\
+            .format(self.vel_x, self.vel_y, self.vel_z,
+                    self.alpha, self.theta, self.v0,
+                    self.x0, self.y0, self.z0,
+                    self.g)
+
+    #def __str__(self):
+    #    return ""
+
     def _set_using_xyz(self):
-        self._xz = math.sqrt(self._vel_x ** 2 + self._vel_z ** 2)
-        self._theta = math.acos(self._vel_x / self._xz)
-        self._v0 = math.sqrt(self._vel_x ** 2 + self._vel_y ** 2 + self._vel_z ** 2)
-        self._alpha = math.acos(self._xz / self._v0)
+        self._xz = math.sqrt(self.vel_x ** 2 + self.vel_z ** 2)
+        self._theta = math.acos(self.vel_x / self._xz)
+        self._v0 = math.sqrt(self.vel_x ** 2 + self.vel_y ** 2 + self.vel_z ** 2)
+        self._alpha = math.acos(self._xz / self.v0)
 
     def _set_using_alpha_theta_v0(self):
-        self._vel_y = self._v0 * math.sin(self._alpha)
-        self._xz = self._v0 * math.cos(self._alpha)
-        self._vel_x = self._xz * math.cos(self._theta)
-        self._vel_z = self._xz * math.sin(self._theta)
+        self._vel_y = self.v0 * math.sin(self.alpha)
+        self._xz = self.v0 * math.cos(self.alpha)
+        self._vel_x = self._xz * math.cos(self.theta)
+        self._vel_z = self._xz * math.sin(self.theta)
 
     @property
     def vel_x(self):
@@ -147,49 +165,49 @@ class Parabola:
             return self.__dict__ == other.__dict__
 
     def x_pos(self, t):
-        return self._x0 + self._vel_x * t
+        return self.x0 + self.vel_x * t
 
     def y_pos(self, t):
-        return self._y0 + self._vel_y * t - 0.5 * self._g * t ** 2
+        return self.y0 + self.vel_y * t - 0.5 * self.g * t ** 2
 
     def z_pos(self, t):
-        return self._z0 + self._vel_z * t
+        return self.z0 + self.vel_z * t
 
     def vy(self, t):
-        return self._vel_y - self._g * t
+        return self.vel_y - self.g * t
 
     def calculate_trajectory(self, time_step=1 / 10):
-        values = [self._vel_x, self._vel_y, self._vel_z, self._x0, self._y0, self._z0, self._plane.a, self._plane.b,
-                  self._plane.c, self._g, time_step]
+        values = [self.vel_x, self.vel_y, self.vel_z, self.x0, self.y0, self.z0, self.plane.a, self.plane.b,
+                  self.plane.c, self.g, time_step]
         if self._last_values == values:
-            return self._last_calc
+            return self.last_calc
         td = self.time_at_d()
         t_values = np.append(np.arange(0, td, time_step), td)
-        x_values = t_values * self._vel_x + self._x0
-        y_values = t_values * (self._vel_y - 0.5 * self._g * t_values) + self._y0
-        z_values = t_values * self._vel_z + self._z0
+        x_values = t_values * self.vel_x + self.x0
+        y_values = t_values * (self.vel_y - 0.5 * self.g * t_values) + self.y0
+        z_values = t_values * self.vel_z + self.z0
         self._last_values = values
-        self._last_calc = x_values, y_values, z_values, t_values
-        return self._last_calc
+        self.last_calc = x_values, y_values, z_values, t_values
+        return self.last_calc
 
     def time_at_b(self):
-        return self._vel_y / self._g
+        return self.vel_y / self.g
 
     def time_at_c(self):
         return 2 * self.time_at_b()
 
     def time_at_d(self):
-        pb = self._plane.a * self._vel_x + self._plane.b * self._vel_z - self.vel_y
-        dis = pb ** 2 - 2 * self._g * (self._plane.a * self._x0 + self._plane.b + self._plane.c - self._y0)
+        pb = self.plane.a * self.vel_x + self.plane.b * self.vel_z - self.vel_y
+        dis = pb ** 2 - 2 * self.g * (self.plane.a * self.x0 + self.plane.b + self.plane.c - self.y0)
         if dis < 0:
             return None
         sqr = math.sqrt(dis)
-        t1 = (- pb + sqr) / self._g
-        t2 = (- pb - sqr) / self._g
+        t1 = (- pb + sqr) / self.g
+        t2 = (- pb - sqr) / self.g
         return t1 if t2 < 0 else t2
 
     def a_pos(self):
-        return self._x0, self._y0, self._z0
+        return self.x0, self.y0, self.z0
 
     def b_pos(self):
         tb = self.time_at_b()
@@ -200,7 +218,7 @@ class Parabola:
     def c_pos(self):
         tc = self.time_at_c()
         return self.x_pos(tc), \
-               self._y0, \
+               self.y0, \
                self.z_pos(tc)
 
     def d_pos(self):

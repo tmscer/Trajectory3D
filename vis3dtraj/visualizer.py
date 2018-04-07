@@ -37,7 +37,7 @@ class Visualizer:
         self.canvas.show()
         self.toolbar.update()
 
-        pyplot.subplots_adjust(app_style.plot.subplot_kwargs)
+        pyplot.subplots_adjust(**app_style.plot.subplot_kwargs)
 
         self.plot_mngr = None
 

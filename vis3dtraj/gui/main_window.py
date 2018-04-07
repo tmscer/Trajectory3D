@@ -477,7 +477,7 @@ class MainWindow:
         if angle:
             self.parabola_alpha.set(math.degrees(parabola.alpha))
             self.parabola_theta.set(math.degrees(parabola.theta))
-        self.parabola_total_time_value.set("Total time: {:.2f} s".format(parabola._last_calc[3][-1]))
+        self.parabola_total_time_value.set("Total time: {:.2f} s".format(parabola.last_calc[3][-1]))
 
     def update_parabola_points(self, parabola):
         a_pos = parabola.a_pos()
