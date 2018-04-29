@@ -1,2 +1,2 @@
 
-import vis3dtraj.visualizer as visualizer
+#import vis3dtraj.visualizer as visualizer

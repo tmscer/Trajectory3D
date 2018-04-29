@@ -24,7 +24,7 @@ class Plane:
         self.c = 0
 
     def __repr__(self):
-        return "Plane(a={}, b={}, c={}, alpha={}, beta={}".format(self.a, self.b, self.c, self.alpha, self.beta)
+        return "Plane(a={}, b={}, c={}, alpha={}, beta={})".format(self.a, self.b, self.c, self.alpha, self.beta)
 
     #def __str__(self):
     #    return ""
