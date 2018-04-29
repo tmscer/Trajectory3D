@@ -1,5 +1,3 @@
-# Created by .ignore support plugin (hsz.mobi)
-/venv/
-.idea/workspace.xml
-/src
+/.venv/
+/.vscode/
 __pycache__/
