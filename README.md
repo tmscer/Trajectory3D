@@ -6,7 +6,7 @@ A Python application visualizing parabolic and spiral trajectories with plane co
 * 3D and 2D displat of Parabolic and Spiral trajectory falling on a plane
 * Complete control over the input values
 * Screenshot saving
-* Detailed window that shows how the properties of the trajectories chang over time
+* Detailed window that shows how the properties of the trajectories change over time
 
 # code in vis3dtraj.actors
 This code can be used  separatedly to model trajectories
