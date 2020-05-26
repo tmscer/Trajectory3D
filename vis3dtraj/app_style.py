@@ -26,7 +26,7 @@ class _Panel:
 
     large_text = (large_font_family, large_font_size)
 
-    width = 250
+    width = 300
 
 
 plot = _Plot()

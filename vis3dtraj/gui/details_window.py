@@ -9,7 +9,7 @@ except ImportError:
 
 try:
     from tkinter import *
-    from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
+    from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 except ImportError:
     raise ImportError("Visualizer requires module tkinter")
 
@@ -34,8 +34,8 @@ class DetailsWindow(Toplevel):
 
         self.canvas = FigureCanvasTkAgg(self.figure, master=self)
         self.canvas.get_tk_widget().pack(side=LEFT, fill=BOTH, expand=0.95)
-        self.toolbar = NavigationToolbar2TkAgg(self.canvas, self)
-        self.canvas.show()
+        self.toolbar = NavigationToolbar2Tk(self.canvas, self)
+        self.canvas.draw()
         self.toolbar.update()
 
         self.figure.subplots_adjust(**style.plot.subplot_kwargs)

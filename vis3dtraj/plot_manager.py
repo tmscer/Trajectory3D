@@ -42,20 +42,20 @@ class Plotter:
         self.set_axes_props()
 
     def set_axes_props(self):
-        self.axes['xyz'].axis('equal')
-        self.axes['xyz'].set_zlim(0)
+        # self.axes['xyz'].axis('equal')
+        # self.axes['xyz'].set_zlim(0)
 
         self.axes['xz'].grid(style.plot.grid_kwargs)
 
         self.axes['xy'].grid(style.plot.grid_kwargs)
-        self.axes['xy'].set_ylim(0)
+        # self.axes['xy'].set_ylim(0)
 
         self.axes['zy'].grid(style.plot.grid_kwargs)
-        self.axes['xy'].set_ylim(0)
-        for axis in self.axes.values():
-            axis.axis('equal')
-            axis.format_coord = self.vis.ui_handler.display_coords
-            axis.autoscale(True)
+        # self.axes['xy'].set_ylim(0)
+        # for axis in self.axes.values():
+        #     axis.axis('equal')
+        #     axis.format_coord = self.vis.ui_handler.display_coords
+        #     axis.autoscale(True)
 
     def adjust_axes(self):
         for key in self.axes:
