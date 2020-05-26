@@ -1,12 +1,12 @@
 # Trajectory3D
-A Python application visualizing parabolic and spiral trajectories with plane collision in 3-dimensional space using MatPlotLib. GUI is made using TkInter.
+A Python application visualizing parabolic and spiral trajectories with plane collision in 3-dimensional space using Matplotlib. GUI is made using TkInter.
 
 # Main features
 
 * 3D and 2D displat of Parabolic and Spiral trajectory falling on a plane
 * Complete control over the input values
 * Screenshot saving
-* Detailed window that shows how the properties of the trajectories changed over time
+* Detailed window that shows how the properties of the trajectories change over time
 
 # code in vis3dtraj.actors
 This code can be used  separatedly to model trajectories
@@ -17,15 +17,15 @@ This code can be used  separatedly to model trajectories
 
 ![picture alt](https://raw.githubusercontent.com/SheepooX/Trajectory3D/master/screenshots/displays.png)
 
-### Options of The Parabolic Trajectory
+### Parabolic trajectory options
 
 ![picture alt](https://raw.githubusercontent.com/SheepooX/Trajectory3D/master/screenshots/parabolic_ui.png)
 
-### Options of The Spiral Trajectory
+### Spiral trajectory options
 
 ![picture alt](https://raw.githubusercontent.com/SheepooX/Trajectory3D/master/screenshots/spiral_ui.png)
 
-### Options of The Plane
+### Plane options
 
 ![picture alt](https://raw.githubusercontent.com/SheepooX/Trajectory3D/master/screenshots/plane_ui.png)
 
